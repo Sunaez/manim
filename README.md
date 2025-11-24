@@ -73,22 +73,28 @@ pip install -r requirements.txt
 - **Linux**: `sudo apt-get install texlive-full` (Debian/Ubuntu)
 
 **GPU Setup for AMD RX 9060XT:**
-```bash
-# Run the GPU setup script to configure environment
-source setup_gpu.sh
 
-# This sets:
-# - Mesa OpenGL version overrides
-# - AMD-specific optimizations
-# - RADV performance flags
-# - DRI_PRIME for GPU selection
+**Windows (PowerShell):**
+```powershell
+# Run in PowerShell
+.\setup_gpu.ps1
 ```
 
-The `setup_gpu.sh` script will:
-- Configure environment variables for AMD GPU
-- Set RADV performance optimizations
-- Enable hardware acceleration
+**Windows (Command Prompt):**
+```cmd
+setup_gpu.bat
+```
+
+**Linux/macOS:**
+```bash
+source setup_gpu.sh
+```
+
+The setup script will:
 - Install GPU libraries (ModernGL, PyOpenGL)
+- Configure environment variables for AMD GPU
+- Enable hardware acceleration
+- Install Manim with all dependencies
 
 ## Configuration
 
@@ -104,10 +110,22 @@ A `manim.cfg` file is included with optimized settings:
 
 **Step 1: Verify GPU setup**
 ```bash
-python3 check_gpu.py
+python check_gpu.py
 ```
 
 **Step 2: Configure AMD GPU environment**
+
+**Windows PowerShell:**
+```powershell
+.\setup_gpu.ps1
+```
+
+**Windows Command Prompt:**
+```cmd
+setup_gpu.bat
+```
+
+**Linux/macOS:**
 ```bash
 source setup_gpu.sh
 ```
@@ -264,6 +282,22 @@ This animation pushes your AMD RX 9060XT to its limits with:
 
 ### Running for Maximum GPU Usage:
 
+**Windows:**
+```powershell
+# 1. Setup AMD GPU environment
+.\setup_gpu.ps1
+
+# 2. Run with OpenGL renderer (GPU accelerated)
+manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
+
+# 3. Monitor GPU usage while rendering:
+# - Open Task Manager (Ctrl+Shift+Esc) -> Performance -> GPU
+# - Use AMD Software: Adrenalin Edition for detailed metrics
+# - Watch VRAM usage (should see several GB used)
+# - GPU should hit 70-100% during particle animations
+```
+
+**Linux:**
 ```bash
 # 1. Setup AMD GPU environment
 source setup_gpu.sh
@@ -271,10 +305,9 @@ source setup_gpu.sh
 # 2. Run with OpenGL renderer (GPU accelerated)
 manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
 
-# 3. Monitor GPU usage while rendering:
-# - Use 'radeontop' or 'nvtop' to see GPU utilization
-# - Watch VRAM usage (should see several GB used)
-# - GPU should hit 70-100% during particle animations
+# 3. Monitor GPU usage:
+# Use 'radeontop' or 'nvtop' to see GPU utilization
+watch -n 1 radeontop
 ```
 
 ### Expected Performance:
@@ -291,8 +324,20 @@ manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
 5. Monitor with: `watch -n 1 radeontop` in another terminal
 
 ### Troubleshooting:
+
+**Windows:**
+If GPU usage is still low:
+- Update AMD drivers to latest version from AMD.com
+- Verify OpenGL renderer is active (check command output)
+- Make sure you ran `.\setup_gpu.ps1` in the current PowerShell session
+- Check Windows Display Settings -> Graphics Settings -> add Python as "High Performance"
+- Ensure Python is using the dedicated AMD GPU (not integrated graphics)
+- Use AMD Software: Adrenalin Edition to verify GPU is selected
+- Try running PowerShell as Administrator
+
+**Linux:**
 If GPU usage is still low:
 - Verify OpenGL renderer is active (check terminal output)
 - Ensure AMD drivers support OpenGL 4.6+
-- Try: `export MESA_GL_VERSION_OVERRIDE=4.6`
+- Run: `export MESA_GL_VERSION_OVERRIDE=4.6`
 - Check: `glxinfo | grep "OpenGL renderer"` shows your AMD card
