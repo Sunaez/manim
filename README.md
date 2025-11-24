@@ -102,7 +102,12 @@ A `manim.cfg` file is included with optimized settings:
 
 ### Quick Start
 
-**IMPORTANT: Run GPU setup first:**
+**Step 1: Verify GPU setup**
+```bash
+python3 check_gpu.py
+```
+
+**Step 2: Configure AMD GPU environment**
 ```bash
 source setup_gpu.sh
 ```
