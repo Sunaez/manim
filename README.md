@@ -1,16 +1,33 @@
-# Binary to Text Animation
+# Manim Animation Projects
 
-A Manim animation that visualizes how binary data is read and decoded into text, featuring professional LaTeX rendering.
+Collection of Manim animations featuring professional LaTeX rendering and GPU-accelerated shader effects.
+
+## Projects
+
+### 1. Binary to Text Animation (`binary_hello.py`)
+Visualizes how binary data is read and decoded into text.
+
+### 2. GPU Shader Demo (`gpu_shader_demo.py`)
+Performance comparison between CPU and GPU rendering with shader effects.
 
 ## Description
 
-This animation shows:
+### Binary to Text Animation
+Shows how binary data is decoded:
 - A line of binary data representing the word "Hello" (rendered with LaTeX)
 - A read header that processes the binary data
 - The binary moving from right to left through the read header
 - Real-time binary-to-decimal conversion display
 - Each byte being decoded and producing the output letters
 - Professional typesetting using LaTeX throughout
+
+### GPU Shader Demo
+Demonstrates GPU vs CPU performance:
+- Side-by-side visual comparison of CPU and GPU rendering
+- Particle system with different complexities
+- Real-time shader effects with animated color gradients
+- Performance timing and speedup calculations
+- Complex mesh rendering with 900+ synchronized elements
 
 ## Font Style Consistency
 
@@ -58,6 +75,18 @@ A `manim.cfg` file is included with optimized settings:
 - **1080p resolution**: High quality output
 
 ## Usage
+
+### Quick Start
+
+**Binary to Text Animation:**
+```bash
+manim --renderer=opengl --write_to_movie -pqh binary_hello.py BinaryToText
+```
+
+**GPU Shader Demo:**
+```bash
+manim --renderer=opengl --write_to_movie -pqh gpu_shader_demo.py GPUShaderDemo
+```
 
 ### GPU-Accelerated Rendering (Recommended)
 
@@ -121,3 +150,42 @@ The word "Hello" is encoded as:
 - l = 01101100
 - l = 01101100
 - o = 01101111
+
+---
+
+## GPU Shader Demo Details
+
+The `gpu_shader_demo.py` file demonstrates GPU acceleration advantages:
+
+### Features:
+- **Side-by-side comparison** of CPU vs GPU rendering
+- **Particle system animation** (20 particles for CPU, 100+ for GPU)
+- **Real-time shader effects** with color gradients
+- **Performance metrics** showing speedup
+- **Complex mesh rendering** (900+ dots with animated colors)
+
+### Rendering Commands:
+
+**GPU rendering (Recommended - Shows true performance):**
+```bash
+manim --renderer=opengl --write_to_movie -pqh gpu_shader_demo.py GPUShaderDemo
+```
+
+**CPU rendering (For comparison):**
+```bash
+manim -pqh gpu_shader_demo.py GPUShaderDemo
+```
+
+### What to Expect:
+- GPU animation shows particles completing in **2 seconds**
+- CPU animation shows particles completing in **6 seconds**
+- Displays **3x speedup** with GPU
+- Complex shader grid with 900+ animated dots demonstrates parallel processing
+- Real-time color transformations showcase GPU shader capabilities
+
+### Performance Benefits:
+When using `--renderer=opengl`:
+- **Parallel processing** of thousands of operations
+- **Real-time shader effects** for complex color calculations
+- **Faster frame rendering** for particle systems
+- **Smooth animations** with higher particle counts
