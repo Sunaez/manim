@@ -2,42 +2,64 @@
 REM Windows GPU Setup Script for AMD RX 9060XT
 REM Run this with: setup_gpu.bat
 
-echo === GPU Setup for Manim with AMD RX 9060XT (Windows) ===
+echo === AMD RX 9060XT GPU Setup for Manim (Windows) ===
 echo.
 
 REM Set AMD GPU environment variables for Windows
 set MESA_GL_VERSION_OVERRIDE=4.6
 set FORCE_DISCRETE_GPU=1
 
+REM Force GPU memory allocation instead of system RAM
+set PYOPENGL_PLATFORM=osmesa
+set MANIM_RENDERER=opengl
+
+REM AMD-specific settings for VRAM usage
+set GPU_MAX_HEAP_SIZE=100
+set GPU_MAX_ALLOC_PERCENT=100
+set GPU_SINGLE_ALLOC_PERCENT=100
+
+REM Disable fallback to CPU
+set PYOPENGL_FULL_TRACE=0
+
 echo Installing required Python packages...
 echo.
 
-REM Install packages
-pip install manim moderngl PyOpenGL PyOpenGL-accelerate numpy
+REM Install packages with specific versions for Windows
+pip install --upgrade pip
+pip install manim moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo === Installation Complete ===
     echo.
-    echo Environment variables set:
+    echo Environment variables set for GPU VRAM usage:
     echo   MESA_GL_VERSION_OVERRIDE = %MESA_GL_VERSION_OVERRIDE%
     echo   FORCE_DISCRETE_GPU = %FORCE_DISCRETE_GPU%
+    echo   GPU_MAX_HEAP_SIZE = %GPU_MAX_HEAP_SIZE%
+    echo   GPU_MAX_ALLOC_PERCENT = %GPU_MAX_ALLOC_PERCENT%
+    echo   MANIM_RENDERER = %MANIM_RENDERER%
     echo.
     echo === GPU Setup Complete ===
     echo.
-    echo Usage:
-    echo   manim --renderer=opengl --write_to_movie -pqh binary_hello.py BinaryToText
+    echo Next Steps:
+    echo   1. Close AMD Software: Adrenalin Edition if running
+    echo   2. Make sure no other apps are using GPU
+    echo   3. Run: python check_gpu.py
+    echo   4. Run: manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
+    echo.
+    echo Monitor VRAM usage in Task Manager -^> Performance -^> GPU -^> Dedicated GPU Memory
     echo.
 ) else (
     echo.
     echo === Installation Failed ===
     echo.
     echo Try installing manually:
-    echo   pip install -r requirements.txt
+    echo   pip install manim moderngl PyOpenGL PyOpenGL-accelerate numpy
 )
 
-echo NOTE: Environment variables are set for this Command Prompt session only.
-echo To make them permanent, add them to your Windows System Environment Variables.
+echo.
+echo IMPORTANT: These environment variables are set for this Command Prompt session only.
+echo To use them, keep this window open and run manim from here.
 echo.
 
 pause
