@@ -1,6 +1,6 @@
 # Manim GPU Animations for Windows
 
-Professional Manim animations optimized for **AMD RX 9060XT 16GB** on Windows, featuring GPU acceleration with VRAM usage and LaTeX rendering.
+Professional Manim animations optimized for **AMD RX 9060XT 16GB** on Windows, featuring automatic GPU acceleration with VRAM usage and LaTeX rendering.
 
 ## Projects
 
@@ -19,72 +19,65 @@ Performance comparison between CPU and GPU rendering with shader effects.
 - **Python 3.8+**
 - **AMD RX 9060XT 16GB** with latest drivers from AMD.com
 - **LaTeX** (TeXworks or MiKTeX) - for text rendering
-- **16GB+ System RAM** (recommended)
 
-## Quick Setup
+## Quick Setup (Automatic - No Manual Configuration!)
 
-### Step 1: Install Dependencies
-
-Open **PowerShell** in the project directory:
+### Step 1: Install Python Packages
 
 ```powershell
-# Run the GPU setup script (sets VRAM environment variables)
-.\setup_gpu.ps1
+pip install manim moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
 ```
 
-Or use **Command Prompt**:
+### Step 2: One-Time Windows GPU Configuration (Run Once)
 
-```cmd
-setup_gpu.bat
-```
-
-This will:
-- Install Manim and all dependencies
-- Install GPU libraries (ModernGL, PyOpenGL)
-- Configure AMD GPU environment variables for **VRAM usage** (not system RAM)
-- Set up OpenGL acceleration
-- Configure heap size and allocation percentages
-
-### Step 2: Verify GPU Setup
+**Right-click PowerShell → Run as Administrator**, then:
 
 ```powershell
-python check_gpu.py
+.\configure_windows_gpu.ps1
 ```
 
-You should see all ✓ checkmarks for installed packages.
+This automatically:
+- ✅ Sets system environment variables for VRAM usage
+- ✅ Configures AMD GPU heap and allocation settings
+- ✅ Opens Windows Graphics Settings for you
+- ✅ Makes settings permanent (no need to run again)
 
-### Step 3: Configure Windows Graphics Settings
+**In Graphics Settings:**
+1. Click **Browse** → select your `python.exe`
+2. Click **Options** → select **High Performance**
+3. Click **Save**
 
-**Critical:** Force Python to use your AMD GPU.
+### Step 3: Done! You're ready to render.
 
-1. Open **Settings** → **System** → **Display**
-2. Scroll down and click **Graphics Settings**
-3. Click **Browse** and navigate to `python.exe`
-   - Usually: `C:\Users\YourName\AppData\Local\Programs\Python\Python311\python.exe`
-4. Click **Options** and select **High Performance**
-5. Click **Save**
+## Running Animations (Simple!)
 
-## Running Animations
-
-**⚠️ Important:** Always run from the **same PowerShell/CMD window** where you ran the setup script! The environment variables are session-specific.
+Just use the automatic GPU launcher:
 
 ### Binary to Text Animation
 
 ```powershell
-manim --renderer=opengl --write_to_movie -pqh binary_hello.py BinaryToText
+python run_gpu.py binary_hello.py BinaryToText -pqh
 ```
 
-### GPU Compute Demo (Uses VRAM - Watch Task Manager!)
+### GPU Compute Demo (2800+ objects using VRAM)
 
 ```powershell
-manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
+python run_gpu.py gpu_compute_demo.py GPUComputeDemo -pqh
 ```
 
 ### GPU Shader Demo
 
 ```powershell
-manim --renderer=opengl --write_to_movie -pqh gpu_shader_demo.py GPUShaderDemo
+python run_gpu.py gpu_shader_demo.py GPUShaderDemo -pqh
 ```
+
+The `run_gpu.py` script automatically:
+- Sets GPU environment variables
+- Forces OpenGL renderer
+- Configures VRAM allocation
+- Runs manim with correct flags
+
+**No manual setup needed every time!**
 
 ## Monitoring VRAM Usage
 
@@ -175,36 +168,28 @@ The `gpu_compute_demo.py` is designed to use your 16GB VRAM:
 
 ### Issue: Still Using System RAM Instead of VRAM
 
-**Solution 1: Check environment variables are set**
+**Solution 1: Verify environment variables are set**
 ```powershell
-# In your current PowerShell session:
-$env:GPU_MAX_HEAP_SIZE
-$env:GPU_MAX_ALLOC_PERCENT
+# Check if variables were configured:
+[System.Environment]::GetEnvironmentVariable('GPU_MAX_HEAP_SIZE', 'User')
+[System.Environment]::GetEnvironmentVariable('GPU_MAX_ALLOC_PERCENT', 'User')
 
-# Should output "100" for both
-# If not, run .\setup_gpu.ps1 again
+# Both should output "100"
+# If not, run configure_windows_gpu.ps1 as Administrator again
 ```
 
-**Solution 2: Make environment variables permanent**
-1. Press `Win + R`, type `sysdm.cpl`, press Enter
-2. Go to **Advanced** tab → **Environment Variables**
-3. Under "User variables", click **New** and add:
-   - Variable: `GPU_MAX_HEAP_SIZE`, Value: `100`
-   - Variable: `GPU_MAX_ALLOC_PERCENT`, Value: `100`
-   - Variable: `GPU_SINGLE_ALLOC_PERCENT`, Value: `100`
-   - Variable: `FORCE_DISCRETE_GPU`, Value: `1`
-4. Click **OK** and restart PowerShell
-
-**Solution 3: Force GPU in Windows Settings**
+**Solution 2: Verify Python is set to High Performance**
 1. Settings → Display → Graphics Settings
-2. Click **Browse**, add `python.exe`
-3. Click **Options**, select **High Performance**
-4. Restart computer
+2. Check if `python.exe` is in the list
+3. If not, click **Browse**, add `python.exe`
+4. Click **Options**, ensure **High Performance** is selected
+5. Restart computer
 
-**Solution 4: Disable integrated graphics (if applicable)**
+**Solution 3: Disable integrated graphics (if you have both)**
 1. Go to BIOS/UEFI (restart, press F2/Del)
 2. Find "iGPU" or "Integrated Graphics"
 3. Disable it (forces Windows to use AMD only)
+4. Save and restart
 
 ### Issue: GPU Utilization Still Low
 
@@ -302,33 +287,31 @@ media\videos\gpu_compute_demo\1080p60\GPUComputeDemo.mp4
 
 ## Performance Tips
 
-1. **Keep PowerShell window open** - Environment variables are session-specific
-2. **Close AMD Software** during rendering
-3. **Close browser** (especially Chrome - uses GPU)
-4. **Use `-pqh`** to push GPU harder
-5. **Monitor temps** - GPU should stay under 85°C
-6. **Update Windows** to latest version
-7. **Update AMD drivers** monthly
-8. **Disable Windows Game Bar** (can interfere with GPU)
+1. **Close AMD Software** during rendering (can interfere)
+2. **Close browser** (especially Chrome - uses GPU)
+3. **Use `-pqh`** for highest quality (pushes GPU hardest)
+4. **Monitor temps** - GPU should stay under 85°C
+5. **Update AMD drivers** from AMD.com (not Windows Update)
+6. **Disable Windows Game Bar** if experiencing issues
 
 ## Verification Checklist
 
-Before rendering, verify:
+Before first run:
 
-- [ ] Ran `.\setup_gpu.ps1` in current PowerShell session
-- [ ] All checkmarks in `python check_gpu.py`
+- [ ] Ran `configure_windows_gpu.ps1` as Administrator (one-time setup)
 - [ ] Python.exe set to "High Performance" in Windows Graphics Settings
-- [ ] Task Manager shows AMD RX 9060XT as GPU 0
-- [ ] AMD drivers updated from AMD.com (not Windows Update)
-- [ ] Running manim from same PowerShell window as setup script
-- [ ] Task Manager Performance tab is open on GPU view
+- [ ] Environment variables are set permanently (check with command in Troubleshooting)
+- [ ] AMD drivers updated from AMD.com
+- [ ] Task Manager Performance tab open on GPU view
 
 Then run:
 ```powershell
-manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
+python run_gpu.py gpu_compute_demo.py GPUComputeDemo -pqh
 ```
 
 Watch Task Manager → Performance → GPU → **"Dedicated GPU Memory"** increase to 2-4 GB during particle animations.
+
+**If VRAM usage looks good, you're all set! No need to configure anything again.**
 
 ## Binary Encoding Reference
 
@@ -343,27 +326,39 @@ The word "Hello" in `binary_hello.py`:
 
 If VRAM usage is still not showing:
 
-1. **Verify environment variables in current session:**
+1. **Verify environment variables are permanently set:**
    ```powershell
-   Get-ChildItem Env: | Where-Object {$_.Name -like "*GPU*"}
+   [System.Environment]::GetEnvironmentVariable('GPU_MAX_HEAP_SIZE', 'User')
+   [System.Environment]::GetEnvironmentVariable('GPU_MAX_ALLOC_PERCENT', 'User')
+   [System.Environment]::GetEnvironmentVariable('FORCE_DISCRETE_GPU', 'User')
    ```
+   All should return "100", "100", "1" respectively.
 
 2. **Check Python is using right GPU:**
-   - Open Task Manager
+   - Open Task Manager before running
    - Run: `python check_gpu.py`
-   - Watch which GPU spikes
+   - Watch which GPU spikes in Task Manager
+   - Should be GPU 0 (AMD RX 9060XT), not integrated graphics
 
 3. **Confirm OpenGL renderer is active:**
-   - Look for "Using OpenGL renderer" in manim output
-   - If it says "Using Cairo renderer", OpenGL isn't working
+   - Look for "Using OpenGL renderer" in output when using `run_gpu.py`
+   - The script automatically forces OpenGL
 
 4. **Test with simple OpenGL app:**
    ```powershell
    python -c "import moderngl; ctx = moderngl.create_standalone_context(); print(ctx.info)"
    ```
-   Should show AMD GPU info.
+   Should show AMD GPU info, not software renderer.
 
-5. **Last resort - Force GPU globally:**
-   - AMD Radeon Settings → Graphics → Advanced
+5. **Force GPU in AMD Software:**
+   - Open AMD Software: Adrenalin Edition
+   - Gaming → Global Graphics
    - Set "GPU Workload" to "Graphics"
    - Set "Wait for Vertical Refresh" to "Off"
+
+6. **Nuclear option - Reset graphics preferences:**
+   ```powershell
+   # Run as Administrator
+   Remove-Item -Path "HKCU:\Software\Microsoft\DirectX\UserGpuPreferences" -Recurse -Force
+   ```
+   Then re-run `configure_windows_gpu.ps1` and add Python to Graphics Settings again.
