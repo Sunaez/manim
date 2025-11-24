@@ -10,6 +10,9 @@ Visualizes how binary data is read and decoded into text.
 ### 2. GPU Shader Demo (`gpu_shader_demo.py`)
 Performance comparison between CPU and GPU rendering with shader effects.
 
+### 3. GPU Compute Demo (`gpu_compute_demo.py`)
+High-performance GPU compute demonstration optimized for AMD RX 9060XT with 2800+ objects.
+
 ## Description
 
 ### Binary to Text Animation
@@ -48,6 +51,9 @@ This ensures:
 - **LaTeX distribution** (TeX Live, MiKTeX, or TeXworks)
   - Required for rendering mathematical and text elements
   - Make sure `latex`, `dvisvgm`, and related tools are in your PATH
+- **GPU**: AMD RX 9060XT 16GB (or similar)
+- **GPU Drivers**: Mesa with RADV or AMDGPU-PRO
+- **GPU Libraries**: ModernGL, PyOpenGL (installed via requirements.txt)
 
 ## Installation
 
@@ -66,6 +72,24 @@ pip install -r requirements.txt
 - **macOS**: MacTeX
 - **Linux**: `sudo apt-get install texlive-full` (Debian/Ubuntu)
 
+**GPU Setup for AMD RX 9060XT:**
+```bash
+# Run the GPU setup script to configure environment
+source setup_gpu.sh
+
+# This sets:
+# - Mesa OpenGL version overrides
+# - AMD-specific optimizations
+# - RADV performance flags
+# - DRI_PRIME for GPU selection
+```
+
+The `setup_gpu.sh` script will:
+- Configure environment variables for AMD GPU
+- Set RADV performance optimizations
+- Enable hardware acceleration
+- Install GPU libraries (ModernGL, PyOpenGL)
+
 ## Configuration
 
 A `manim.cfg` file is included with optimized settings:
@@ -78,6 +102,11 @@ A `manim.cfg` file is included with optimized settings:
 
 ### Quick Start
 
+**IMPORTANT: Run GPU setup first:**
+```bash
+source setup_gpu.sh
+```
+
 **Binary to Text Animation:**
 ```bash
 manim --renderer=opengl --write_to_movie -pqh binary_hello.py BinaryToText
@@ -86,6 +115,11 @@ manim --renderer=opengl --write_to_movie -pqh binary_hello.py BinaryToText
 **GPU Shader Demo:**
 ```bash
 manim --renderer=opengl --write_to_movie -pqh gpu_shader_demo.py GPUShaderDemo
+```
+
+**GPU Compute Demo (2800+ objects - Maximum GPU Utilization):**
+```bash
+manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
 ```
 
 ### GPU-Accelerated Rendering (Recommended)
@@ -189,3 +223,71 @@ When using `--renderer=opengl`:
 - **Real-time shader effects** for complex color calculations
 - **Faster frame rendering** for particle systems
 - **Smooth animations** with higher particle counts
+
+---
+
+## GPU Compute Demo Details (AMD RX 9060XT Optimized)
+
+The `gpu_compute_demo.py` file is specifically designed to maximize GPU utilization:
+
+### What It Does:
+This animation pushes your AMD RX 9060XT to its limits with:
+
+1. **2000-Particle System** with real-time physics
+   - Wave motion simulation
+   - Complex vortex calculations
+   - Explosion particle burst
+
+2. **800-Point Fractal Pattern**
+   - Golden angle spiral generation
+   - Simultaneous color transformations
+   - Rotation and scaling transforms
+
+3. **Parallel GPU Operations**
+   - All particles updated simultaneously
+   - Color interpolation across 2800+ objects
+   - Real-time position calculations
+
+### Why This Uses Your GPU:
+
+**With OpenGL Renderer (`--renderer=opengl`):**
+- Each particle is a vertex processed by GPU
+- Transformations happen on GPU shaders
+- Color calculations run in parallel on GPU cores
+- Your 16GB VRAM holds all object data
+- AMD's RDNA architecture processes thousands of operations per frame
+
+### Running for Maximum GPU Usage:
+
+```bash
+# 1. Setup AMD GPU environment
+source setup_gpu.sh
+
+# 2. Run with OpenGL renderer (GPU accelerated)
+manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
+
+# 3. Monitor GPU usage while rendering:
+# - Use 'radeontop' or 'nvtop' to see GPU utilization
+# - Watch VRAM usage (should see several GB used)
+# - GPU should hit 70-100% during particle animations
+```
+
+### Expected Performance:
+- **GPU Utilization**: 70-100% during particle effects
+- **VRAM Usage**: 2-4 GB for object data
+- **Frame Rate**: Smooth 60fps with OpenGL
+- **Render Time**: ~1-2 minutes for full animation
+
+### Optimization Tips:
+1. Make sure AMD drivers are up to date
+2. Use `source setup_gpu.sh` before rendering
+3. Close other GPU-intensive applications
+4. Use `-pqh` for full quality (tests GPU more)
+5. Monitor with: `watch -n 1 radeontop` in another terminal
+
+### Troubleshooting:
+If GPU usage is still low:
+- Verify OpenGL renderer is active (check terminal output)
+- Ensure AMD drivers support OpenGL 4.6+
+- Try: `export MESA_GL_VERSION_OVERRIDE=4.6`
+- Check: `glxinfo | grep "OpenGL renderer"` shows your AMD card
