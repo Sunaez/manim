@@ -6,13 +6,13 @@ class BinaryToText(Scene):
         # H=01001000, e=01100101, l=01101100, l=01101100, o=01101111
         binary_string = "01001000 01100101 01101100 01101100 01101111"
 
-        # Create title using LaTeX
+        # Create title using Tex for LaTeX formatting
         title = Tex(r"\textbf{Binary to Text Decoder}", font_size=48).to_edge(UP)
         self.play(Write(title))
         self.wait(0.5)
 
-        # Create the binary text using LaTeX with monospace font
-        binary_text = MathTex(
+        # Create the binary text using Tex for monospace formatting
+        binary_text = Tex(
             r"\texttt{01001000}", r"\;",
             r"\texttt{01100101}", r"\;",
             r"\texttt{01101100}", r"\;",
@@ -31,15 +31,15 @@ class BinaryToText(Scene):
         )
         read_header.move_to(ORIGIN)
 
-        # Add label for read header using LaTeX
-        header_label = Tex(r"\textsc{Read Header}", font_size=32, color=YELLOW)
+        # Add label for read header using Text (normal text)
+        header_label = Text("Read Header", font_size=32, color=YELLOW)
         header_label.next_to(read_header, UP, buff=0.3)
 
-        # Create output area using LaTeX
-        output_label = Tex(r"\textbf{Output:}", font_size=36)
+        # Create output area using Text (normal text)
+        output_label = Text("Output:", font_size=36, weight=BOLD)
         output_label.move_to(DOWN * 2 + LEFT * 2)
 
-        output_text = Tex("", font_size=36, color=GREEN)
+        output_text = Text("", font_size=36, color=GREEN)
         output_text.next_to(output_label, RIGHT)
 
         # Display read header and output area
@@ -58,19 +58,19 @@ class BinaryToText(Scene):
         letters = ["H", "e", "l", "l", "o"]
         binary_groups = binary_string.split()
 
-        # Add binary annotations using LaTeX
-        binary_annotation = Tex(
-            r"$H$", r"\quad", r"$e$", r"\quad", r"$l$", r"\quad", r"$l$", r"\quad", r"$o$",
-            font_size=24,
-            color=GRAY
-        )
-        binary_annotation.next_to(binary_text, DOWN, buff=0.3)
-        self.play(FadeIn(binary_annotation, shift=UP * 0.2))
+        # Add binary annotations using Text (normal text)
+        letter_labels = VGroup(*[
+            Text(letter, font_size=24, color=GRAY)
+            for letter in letters
+        ])
+        letter_labels.arrange(RIGHT, buff=0.5)
+        letter_labels.move_to(binary_text.get_center() + DOWN * 0.8)
+        self.play(FadeIn(letter_labels, shift=UP * 0.2))
         self.wait(0.3)
 
         # Move binary through the read header
-        # Since MathTex creates separate submobjects, we get the indices of actual binary bytes (even indices)
-        binary_indices = [0, 2, 4, 6, 8]  # Indices of binary bytes in MathTex
+        # Since Tex creates separate submobjects, we get the indices of actual binary bytes (even indices)
+        binary_indices = [0, 2, 4, 6, 8]  # Indices of binary bytes in Tex
 
         for i, (binary_idx, binary_byte, letter) in enumerate(zip(binary_indices, binary_groups, letters)):
             # Get the position of the current binary byte
@@ -81,10 +81,10 @@ class BinaryToText(Scene):
             header_center = read_header.get_center()[0]
             shift_amount = header_center - byte_center
 
-            # Animate movement of both binary text and annotation together
+            # Animate movement of both binary text and letter labels together
             self.play(
                 binary_text.animate.shift(RIGHT * shift_amount),
-                binary_annotation.animate.shift(RIGHT * shift_amount),
+                letter_labels.animate.shift(RIGHT * shift_amount),
                 run_time=1.5,
                 rate_func=linear
             )
@@ -101,7 +101,7 @@ class BinaryToText(Scene):
                 run_time=0.2
             )
 
-            # Show binary to decimal conversion using LaTeX
+            # Show binary to decimal conversion using MathTex (equation)
             decimal_value = int(binary_byte, 2)
             conversion = MathTex(
                 r"\texttt{" + binary_byte + r"}_2",
@@ -116,8 +116,8 @@ class BinaryToText(Scene):
             self.play(FadeIn(conversion, shift=LEFT * 0.3), run_time=0.4)
             self.wait(0.3)
 
-            # Add the decoded letter to output using LaTeX
-            new_output = Tex(r"\texttt{" + letter + r"}", font_size=40, color=GREEN)
+            # Add the decoded letter to output using Text (normal text with font)
+            new_output = Text(letter, font_size=40, font="Monospace", color=GREEN, weight=BOLD)
             if i == 0:
                 new_output.next_to(output_label, RIGHT, buff=0.2)
             else:
@@ -141,11 +141,11 @@ class BinaryToText(Scene):
         # Final wait to show complete result
         self.wait(1)
 
-        # Add completion checkmark using LaTeX
-        checkmark = Tex(r"$\checkmark$", font_size=72, color=GREEN)
+        # Add completion checkmark using MathTex (math symbol/equation)
+        checkmark = MathTex(r"\checkmark", font_size=72, color=GREEN)
         checkmark.next_to(output_text, RIGHT, buff=0.3)
 
-        # Highlight the final output with LaTeX formatting
+        # Highlight the final output with Tex (LaTeX formatting)
         final_text = Tex(
             r"\Large\textbf{Decoded: ``Hello''}",
             font_size=48,
