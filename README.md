@@ -49,9 +49,29 @@ pip install -r requirements.txt
 - **macOS**: MacTeX
 - **Linux**: `sudo apt-get install texlive-full` (Debian/Ubuntu)
 
+## Configuration
+
+A `manim.cfg` file is included with optimized settings:
+- **Cache disabled**: Prevents intermediate media/tex files from accumulating
+- **Flush cache enabled**: Cleans up temporary files after rendering
+- **60 fps**: Smooth animation playback
+- **1080p resolution**: High quality output
+
 ## Usage
 
-To render the animation:
+### GPU-Accelerated Rendering (Recommended)
+
+For faster rendering with graphics card acceleration:
+
+```bash
+# High quality with GPU acceleration (FASTEST)
+manim --renderer=opengl --write_to_movie -pqh binary_hello.py BinaryToText
+
+# Low quality preview with GPU
+manim --renderer=opengl --write_to_movie -pql binary_hello.py BinaryToText
+```
+
+### Standard Rendering (CPU)
 
 ```bash
 # Render in high quality
@@ -64,7 +84,21 @@ manim -pql binary_hello.py BinaryToText
 manim -pqm binary_hello.py BinaryToText
 ```
 
-**Note**: Manim renders the complete animation as a single video file. The `-p` flag automatically plays the video when rendering is complete. Output will be saved in the `media/videos/` directory.
+### Clean Rendering (No Intermediate Files)
+
+To ensure no tex/media files are left behind:
+
+```bash
+# The manim.cfg already has disable_caching=True and flush_cache=True
+# But you can also explicitly clear cache before rendering:
+manim --flush_cache -pqh binary_hello.py BinaryToText
+```
+
+**Note**:
+- The `-p` flag automatically plays the video when rendering is complete
+- Final output is saved in `media/videos/` directory
+- With caching disabled, no intermediate files accumulate
+- GPU rendering (OpenGL) is significantly faster than CPU rendering (Cairo)
 
 ## Output
 
