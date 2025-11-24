@@ -1,4 +1,4 @@
-from manim import *
+from manimlib import *
 import numpy as np
 
 class GPUShaderDemo(Scene):

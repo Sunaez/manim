@@ -2,16 +2,12 @@
 REM Windows GPU Setup Script for AMD RX 9060XT
 REM Run this with: setup_gpu.bat
 
-echo === AMD RX 9060XT GPU Setup for Manim (Windows) ===
+echo === AMD RX 9060XT GPU Setup for ManimGL (Windows) ===
 echo.
 
 REM Set AMD GPU environment variables for Windows
 set MESA_GL_VERSION_OVERRIDE=4.6
 set FORCE_DISCRETE_GPU=1
-
-REM Force GPU memory allocation instead of system RAM
-set PYOPENGL_PLATFORM=osmesa
-set MANIM_RENDERER=opengl
 
 REM AMD-specific settings for VRAM usage
 set GPU_MAX_HEAP_SIZE=100
@@ -26,7 +22,7 @@ echo.
 
 REM Install packages with specific versions for Windows
 pip install --upgrade pip
-pip install manim moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
+pip install manimgl moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
 
 if %ERRORLEVEL% EQU 0 (
     echo.
@@ -37,15 +33,16 @@ if %ERRORLEVEL% EQU 0 (
     echo   FORCE_DISCRETE_GPU = %FORCE_DISCRETE_GPU%
     echo   GPU_MAX_HEAP_SIZE = %GPU_MAX_HEAP_SIZE%
     echo   GPU_MAX_ALLOC_PERCENT = %GPU_MAX_ALLOC_PERCENT%
-    echo   MANIM_RENDERER = %MANIM_RENDERER%
     echo.
-    echo === GPU Setup Complete ===
+    echo === ManimGL Setup Complete ===
+    echo.
+    echo ManimGL uses OpenGL natively - GPU acceleration is automatic!
     echo.
     echo Next Steps:
     echo   1. Close AMD Software: Adrenalin Edition if running
     echo   2. Make sure no other apps are using GPU
     echo   3. Run: python check_gpu.py
-    echo   4. Run: manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
+    echo   4. Run: python run_gpu.py gpu_compute_demo.py GPUComputeDemo
     echo.
     echo Monitor VRAM usage in Task Manager -^> Performance -^> GPU -^> Dedicated GPU Memory
     echo.

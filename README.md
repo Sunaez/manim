@@ -1,6 +1,15 @@
-# Manim GPU Animations for Windows
+# ManimGL GPU Animations for Windows
 
-Professional Manim animations optimized for **AMD RX 9060XT 16GB** on Windows, featuring automatic GPU acceleration with VRAM usage and LaTeX rendering.
+Professional animations optimized for **AMD RX 9060XT 16GB** on Windows using **ManimGL** - the original Manim with native OpenGL/GPU support.
+
+## Why ManimGL?
+
+**ManimGL has NATIVE GPU support** - unlike Manim Community Edition, it's built from the ground up for OpenGL rendering:
+- ✅ **Native OpenGL** - GPU acceleration is automatic, no flags needed
+- ✅ **Better VRAM usage** - Directly uses GPU memory
+- ✅ **Faster rendering** - Optimized for graphics cards
+- ✅ **Real-time preview** - Interactive window with GPU acceleration
+- ✅ **Created by 3Blue1Brown** - The original vision
 
 ## Projects
 
@@ -25,7 +34,7 @@ Performance comparison between CPU and GPU rendering with shader effects.
 ### Step 1: Install Python Packages
 
 ```powershell
-pip install manim moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
+pip install manimgl moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
 ```
 
 ### Step 2: One-Time Windows GPU Configuration (Run Once)
@@ -56,28 +65,27 @@ Just use the automatic GPU launcher:
 ### Binary to Text Animation
 
 ```powershell
-python run_gpu.py binary_hello.py BinaryToText -pqh
+python run_gpu.py binary_hello.py BinaryToText
 ```
 
 ### GPU Compute Demo (2800+ objects using VRAM)
 
 ```powershell
-python run_gpu.py gpu_compute_demo.py GPUComputeDemo -pqh
+python run_gpu.py gpu_compute_demo.py GPUComputeDemo
 ```
 
 ### GPU Shader Demo
 
 ```powershell
-python run_gpu.py gpu_shader_demo.py GPUShaderDemo -pqh
+python run_gpu.py gpu_shader_demo.py GPUShaderDemo
 ```
 
 The `run_gpu.py` script automatically:
 - Sets GPU environment variables
-- Forces OpenGL renderer
 - Configures VRAM allocation
-- Runs manim with correct flags
+- Runs manimgl (OpenGL is native - no flags needed!)
 
-**No manual setup needed every time!**
+**ManimGL uses OpenGL by default - GPU acceleration is automatic!**
 
 ## Monitoring VRAM Usage
 
@@ -123,20 +131,27 @@ GPU_MAX_HEAP_SIZE = 100           # Use 100% of GPU heap
 GPU_MAX_ALLOC_PERCENT = 100       # Allow 100% VRAM allocation
 GPU_SINGLE_ALLOC_PERCENT = 100    # Single allocation can use 100%
 FORCE_DISCRETE_GPU = 1            # Force dedicated AMD GPU
-MANIM_RENDERER = opengl           # Use OpenGL renderer
 MESA_GL_VERSION_OVERRIDE = 4.6    # Force OpenGL 4.6
 ```
 
 These prevent fallback to system RAM.
 
-### manim.cfg Settings
+## ManimGL Advantages
 
-```ini
-disable_caching = True    # No intermediate files
-flush_cache = True        # Clean temporary files
-frame_rate = 60          # Smooth 60fps
-pixel_height = 1080      # Full HD resolution
-```
+### Native OpenGL Rendering
+- No `--renderer=opengl` flag needed
+- OpenGL is the default and only renderer
+- Built for GPU from the ground up
+
+### Interactive Preview Window
+- Real-time rendering preview
+- GPU-accelerated display
+- Can interact with animations while they run
+
+### Better Performance
+- Optimized for graphics cards
+- Direct GPU memory access
+- More efficient than Manim Community Edition
 
 ## GPU Compute Demo Details
 
@@ -200,7 +215,7 @@ The `gpu_compute_demo.py` is designed to use your 16GB VRAM:
 
 2. **Close AMD Software while rendering**
    - AMD Adrenalin can interfere with rendering
-   - Close it before running manim
+   - Close it before running manimgl
 
 3. **Close background applications**
    - Browsers (especially Chrome)
@@ -220,9 +235,9 @@ The `gpu_compute_demo.py` is designed to use your 16GB VRAM:
 
 **Solution 1: Reinstall GPU packages**
 ```powershell
-pip uninstall moderngl PyOpenGL PyOpenGL-accelerate
+pip uninstall manimgl moderngl PyOpenGL PyOpenGL-accelerate
 pip cache purge
-pip install moderngl PyOpenGL PyOpenGL-accelerate --no-cache-dir
+pip install manimgl moderngl PyOpenGL PyOpenGL-accelerate --no-cache-dir
 ```
 
 **Solution 2: Verify OpenGL support**
@@ -247,52 +262,39 @@ Look for output showing your AMD GPU.
 
 ## Command Reference
 
-### Quality Flags
+### Running Animations
+
 ```powershell
--pql  # Low quality (480p) - Fast preview
--pqm  # Medium quality (720p)
--pqh  # High quality (1080p) - Best for GPU testing
+# Basic usage
+python run_gpu.py <script.py> <SceneName>
+
+# Examples
+python run_gpu.py binary_hello.py BinaryToText
+python run_gpu.py gpu_compute_demo.py GPUComputeDemo
+python run_gpu.py gpu_shader_demo.py GPUShaderDemo
 ```
 
-### Important Flags
-```powershell
---renderer=opengl    # Required for GPU acceleration
---write_to_movie     # Save as video file
--p                   # Play video after rendering
-```
-
-### Examples
-```powershell
-# Quick preview (low quality, fast)
-manim --renderer=opengl --write_to_movie -pql gpu_compute_demo.py GPUComputeDemo
-
-# High quality (uses maximum VRAM)
-manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo
-
-# List all scenes in a file
-manim binary_hello.py --list
-```
+**Note**: ManimGL renders at optimal quality automatically - no quality flags needed!
 
 ## Output Location
 
 Videos are saved to:
 ```
-media\videos\[script_name]\[quality]\[scene_name].mp4
+media\videos\[script_name]\[SceneName].mp4
 ```
 
 Example:
 ```
-media\videos\gpu_compute_demo\1080p60\GPUComputeDemo.mp4
+media\videos\gpu_compute_demo\GPUComputeDemo.mp4
 ```
 
 ## Performance Tips
 
 1. **Close AMD Software** during rendering (can interfere)
 2. **Close browser** (especially Chrome - uses GPU)
-3. **Use `-pqh`** for highest quality (pushes GPU hardest)
-4. **Monitor temps** - GPU should stay under 85°C
-5. **Update AMD drivers** from AMD.com (not Windows Update)
-6. **Disable Windows Game Bar** if experiencing issues
+3. **Monitor temps** - GPU should stay under 85°C
+4. **Update AMD drivers** from AMD.com (not Windows Update)
+5. **Disable Windows Game Bar** if experiencing issues
 
 ## Verification Checklist
 
@@ -306,7 +308,7 @@ Before first run:
 
 Then run:
 ```powershell
-python run_gpu.py gpu_compute_demo.py GPUComputeDemo -pqh
+python run_gpu.py gpu_compute_demo.py GPUComputeDemo
 ```
 
 Watch Task Manager → Performance → GPU → **"Dedicated GPU Memory"** increase to 2-4 GB during particle animations.
@@ -340,9 +342,9 @@ If VRAM usage is still not showing:
    - Watch which GPU spikes in Task Manager
    - Should be GPU 0 (AMD RX 9060XT), not integrated graphics
 
-3. **Confirm OpenGL renderer is active:**
-   - Look for "Using OpenGL renderer" in output when using `run_gpu.py`
-   - The script automatically forces OpenGL
+3. **Confirm ManimGL is using OpenGL:**
+   - ManimGL always uses OpenGL - it's the only renderer
+   - The `run_gpu.py` script automatically configures environment
 
 4. **Test with simple OpenGL app:**
    ```powershell
@@ -362,3 +364,21 @@ If VRAM usage is still not showing:
    Remove-Item -Path "HKCU:\Software\Microsoft\DirectX\UserGpuPreferences" -Recurse -Force
    ```
    Then re-run `configure_windows_gpu.ps1` and add Python to Graphics Settings again.
+
+## Why ManimGL Over Manim Community?
+
+**ManimGL is the original Manim created by Grant Sanderson (3Blue1Brown)**:
+- Designed for GPU rendering from day one
+- OpenGL is the only renderer - simpler and faster
+- Active development focused on performance
+- Better suited for GPU-heavy animations
+- Native VRAM usage without workarounds
+
+**Manim Community Edition:**
+- Cairo renderer by default (CPU-only)
+- OpenGL support is secondary/experimental
+- Requires `--renderer=opengl` flag
+- More complex architecture
+- Better for compatibility, worse for GPU performance
+
+For your AMD RX 9060XT 16GB, **ManimGL is the better choice** for maximum GPU utilization!

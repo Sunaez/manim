@@ -1,4 +1,4 @@
-from manim import *
+from manimlib import *
 
 class BinaryToText(Scene):
     def construct(self):
@@ -36,7 +36,7 @@ class BinaryToText(Scene):
         header_label.next_to(read_header, UP, buff=0.3)
 
         # Create output area using Text (normal text)
-        output_label = Text("Output:", font_size=36, weight=BOLD)
+        output_label = Text("Output:", font_size=36)
         output_label.move_to(DOWN * 2 + LEFT * 2)
 
         output_text = Text("", font_size=36, color=GREEN)
@@ -117,7 +117,7 @@ class BinaryToText(Scene):
             self.wait(0.3)
 
             # Add the decoded letter to output using Text (normal text with font)
-            new_output = Text(letter, font_size=40, font="Monospace", color=GREEN, weight=BOLD)
+            new_output = Text(letter, font_size=40, font="Monospace", color=GREEN)
             if i == 0:
                 new_output.next_to(output_label, RIGHT, buff=0.2)
             else:

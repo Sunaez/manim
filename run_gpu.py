@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
 """
-Automatic GPU setup and launcher for Manim on Windows with AMD RX 9060XT.
-This script automatically configures environment and runs manim with GPU acceleration.
+Automatic GPU setup and launcher for ManimGL on Windows with AMD RX 9060XT.
+This script automatically configures environment and runs manimgl with GPU acceleration.
 
 Usage:
-    python run_gpu.py gpu_compute_demo.py GPUComputeDemo -pqh
-    python run_gpu.py binary_hello.py BinaryToText -pqh
+    python run_gpu.py gpu_compute_demo.py GPUComputeDemo
+    python run_gpu.py binary_hello.py BinaryToText
 """
 
 import os
@@ -25,14 +25,13 @@ def setup_gpu_environment():
     os.environ['GPU_SINGLE_ALLOC_PERCENT'] = '100'
 
     # OpenGL settings
-    os.environ['MANIM_RENDERER'] = 'opengl'
     os.environ['PYOPENGL_FULL_TRACE'] = '0'
 
     # Windows GPU preference
     os.environ['DXGI_ADAPTER'] = '0'  # Use first discrete GPU
 
     print("=" * 60)
-    print("AMD RX 9060XT GPU Configuration")
+    print("AMD RX 9060XT GPU Configuration for ManimGL")
     print("=" * 60)
     print(f"GPU_MAX_HEAP_SIZE: {os.environ['GPU_MAX_HEAP_SIZE']}")
     print(f"GPU_MAX_ALLOC_PERCENT: {os.environ['GPU_MAX_ALLOC_PERCENT']}")
@@ -41,10 +40,10 @@ def setup_gpu_environment():
     print()
 
 def run_manim(args):
-    """Run manim with OpenGL renderer and GPU acceleration."""
+    """Run manimgl with GPU acceleration (OpenGL is default in ManimGL)."""
 
-    # Build manim command
-    cmd = ['manim', '--renderer=opengl', '--write_to_movie'] + args
+    # Build manimgl command - OpenGL is native, no flags needed!
+    cmd = ['manimgl'] + args
 
     print("Running command:")
     print(" ".join(cmd))
@@ -52,10 +51,11 @@ def run_manim(args):
     print("Monitor VRAM usage in Task Manager:")
     print("  Performance -> GPU -> Dedicated GPU Memory")
     print()
+    print("ManimGL uses OpenGL by default - GPU acceleration is automatic!")
     print("=" * 60)
     print()
 
-    # Run manim
+    # Run manimgl
     try:
         result = subprocess.run(cmd, check=True)
         print()
@@ -66,14 +66,14 @@ def run_manim(args):
     except subprocess.CalledProcessError as e:
         print()
         print("=" * 60)
-        print(f"Error: Manim failed with exit code {e.returncode}")
+        print(f"Error: ManimGL failed with exit code {e.returncode}")
         print("=" * 60)
         return e.returncode
     except FileNotFoundError:
         print()
         print("=" * 60)
-        print("Error: 'manim' command not found!")
-        print("Install manim first: pip install manim")
+        print("Error: 'manimgl' command not found!")
+        print("Install ManimGL first: pip install manimgl")
         print("=" * 60)
         return 1
 
@@ -81,16 +81,14 @@ def main():
     """Main entry point."""
 
     if len(sys.argv) < 2:
-        print("Usage: python run_gpu.py <script.py> <SceneName> [options]")
+        print("Usage: python run_gpu.py <script.py> <SceneName>")
         print()
         print("Examples:")
-        print("  python run_gpu.py gpu_compute_demo.py GPUComputeDemo -pqh")
-        print("  python run_gpu.py binary_hello.py BinaryToText -pql")
+        print("  python run_gpu.py gpu_compute_demo.py GPUComputeDemo")
+        print("  python run_gpu.py binary_hello.py BinaryToText")
         print()
-        print("Quality options:")
-        print("  -pql  : Low quality (480p) - fast preview")
-        print("  -pqm  : Medium quality (720p)")
-        print("  -pqh  : High quality (1080p) - best for GPU testing")
+        print("Note: ManimGL uses OpenGL natively - GPU acceleration is automatic!")
+        print("      No quality flags needed - renders at optimal quality.")
         return 1
 
     # Setup GPU environment automatically

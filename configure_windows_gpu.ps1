@@ -2,7 +2,7 @@
 # This script configures Windows to always use AMD GPU for Python
 # Run as Administrator: Right-click PowerShell -> Run as Administrator
 
-Write-Host "=== Configuring Windows for AMD RX 9060XT ===" -ForegroundColor Cyan
+Write-Host "=== Configuring Windows for AMD RX 9060XT with ManimGL ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Check if running as Administrator

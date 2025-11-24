@@ -1,16 +1,12 @@
 # Windows GPU Setup Script for AMD RX 9060XT
 # Run this with: .\setup_gpu.ps1
 
-Write-Host "=== AMD RX 9060XT GPU Setup for Manim (Windows) ===" -ForegroundColor Cyan
+Write-Host "=== AMD RX 9060XT GPU Setup for ManimGL (Windows) ===" -ForegroundColor Cyan
 Write-Host ""
 
 # Set AMD GPU environment variables for Windows
 $env:MESA_GL_VERSION_OVERRIDE = "4.6"
 $env:FORCE_DISCRETE_GPU = "1"
-
-# Force GPU memory allocation instead of system RAM
-$env:PYOPENGL_PLATFORM = "osmesa"  # Force OpenGL to use GPU
-$env:MANIM_RENDERER = "opengl"
 
 # AMD-specific settings for VRAM usage
 $env:GPU_MAX_HEAP_SIZE = "100"
@@ -25,7 +21,7 @@ Write-Host ""
 
 # Install packages with specific versions for Windows
 pip install --upgrade pip
-pip install manim moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
+pip install manimgl moderngl PyOpenGL PyOpenGL-accelerate numpy pillow
 
 if ($LASTEXITCODE -eq 0) {
     Write-Host ""
@@ -36,15 +32,16 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "  FORCE_DISCRETE_GPU = $env:FORCE_DISCRETE_GPU" -ForegroundColor White
     Write-Host "  GPU_MAX_HEAP_SIZE = $env:GPU_MAX_HEAP_SIZE" -ForegroundColor White
     Write-Host "  GPU_MAX_ALLOC_PERCENT = $env:GPU_MAX_ALLOC_PERCENT" -ForegroundColor White
-    Write-Host "  MANIM_RENDERER = $env:MANIM_RENDERER" -ForegroundColor White
     Write-Host ""
-    Write-Host "=== GPU Setup Complete ===" -ForegroundColor Green
+    Write-Host "=== ManimGL Setup Complete ===" -ForegroundColor Green
+    Write-Host ""
+    Write-Host "ManimGL uses OpenGL natively - GPU acceleration is automatic!" -ForegroundColor Cyan
     Write-Host ""
     Write-Host "Next Steps:" -ForegroundColor Yellow
     Write-Host "  1. Close AMD Software: Adrenalin Edition if running" -ForegroundColor White
     Write-Host "  2. Make sure no other apps are using GPU" -ForegroundColor White
     Write-Host "  3. Run: python check_gpu.py" -ForegroundColor White
-    Write-Host "  4. Run: manim --renderer=opengl --write_to_movie -pqh gpu_compute_demo.py GPUComputeDemo" -ForegroundColor White
+    Write-Host "  4. Run: python run_gpu.py gpu_compute_demo.py GPUComputeDemo" -ForegroundColor White
     Write-Host ""
     Write-Host "Monitor VRAM usage in Task Manager -> Performance -> GPU -> Dedicated GPU Memory" -ForegroundColor Cyan
     Write-Host ""

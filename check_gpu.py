@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 GPU Verification Script for AMD RX 9060XT
-Checks if GPU is properly configured for Manim rendering
+Checks if GPU is properly configured for ManimGL rendering
 """
 
 import sys
@@ -59,10 +59,10 @@ def check_moderngl():
         return False
 
 def check_manim():
-    """Check Manim installation."""
+    """Check ManimGL installation."""
     try:
-        import manim
-        print(f"✓ Manim is installed")
+        import manimlib
+        print(f"✓ ManimGL is installed")
 
         # Check for OpenGL renderer
         try:
@@ -72,7 +72,7 @@ def check_manim():
             print("  ✗ OpenGL renderer not available")
         return True
     except ImportError:
-        print("✗ Manim is NOT installed")
+        print("✗ ManimGL is NOT installed")
         return False
 
 def check_environment():
@@ -113,7 +113,7 @@ def main():
 
     # Check required packages
     print("=== Required Packages ===")
-    all_good &= check_import("manim")
+    all_good &= check_import("manimgl")
     all_good &= check_import("moderngl")
     all_good &= check_import("OpenGL", "PyOpenGL")
     all_good &= check_import("numpy")

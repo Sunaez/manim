@@ -1,4 +1,4 @@
-from manim import *
+from manimlib import *
 import numpy as np
 
 class GPUComputeDemo(Scene):
@@ -15,8 +15,7 @@ class GPUComputeDemo(Scene):
         subtitle = Text(
             "Leveraging AMD RX 9060XT 16GB",
             font_size=28,
-            color=RED,
-            weight=BOLD
+            color=RED
         )
         subtitle.next_to(title, DOWN, buff=0.2)
 
