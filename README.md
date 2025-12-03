@@ -5,29 +5,57 @@ A comprehensive demonstration of Manim Community Edition features including text
 ## Requirements
 
 - Python 3.8 or higher
-- Manim Community Edition 0.18.0 or higher
 - Windows operating system
+- **Latest version** of Manim Community Edition (automatically installed)
 
-## Installation
+## Quick Start (Recommended)
 
-1. Install Python from [python.org](https://www.python.org/downloads/)
+### 1. Install Python
 
-2. Install dependencies:
+Download and install Python from [python.org](https://www.python.org/downloads/)
+- **Important**: Check "Add Python to PATH" during installation
+
+### 2. Set Up Virtual Environment
+
+Double-click `setup_venv.bat` or run in PowerShell:
+
 ```bash
-pip install -r requirements.txt
+.\setup_venv.bat
 ```
 
-3. Verify installation:
+This will:
+- ✅ Create an isolated Python virtual environment in `venv/`
+- ✅ Install the **latest version** of Manim CE automatically
+- ✅ Install all dependencies
+- ✅ Verify the installation
+
+**This only needs to be run once!** (or when you want to update to the latest Manim version)
+
+### 3. Run the Demo
+
+Double-click the batch file or run:
+
 ```bash
-manim --version
+run_manim.bat manim_demo.py ManimFeatureDemo -pqm
 ```
 
-## Running the Animation
+That's it! The animation will render and open automatically.
 
-To render the demo animation as a video file in the `media/videos` folder:
+## Running Animations
+
+### Using the Run Script (Recommended)
+
+The `run_manim.bat` script automatically uses the virtual environment:
 
 ```bash
-manim -pql manim_demo.py ManimFeatureDemo
+# Medium quality, 30fps (recommended)
+run_manim.bat manim_demo.py ManimFeatureDemo -pqm
+
+# High quality, 60fps
+run_manim.bat manim_demo.py ManimFeatureDemo -pqh
+
+# Low quality for quick tests
+run_manim.bat manim_demo.py ManimFeatureDemo -pql
 ```
 
 ### Command Options
@@ -35,17 +63,24 @@ manim -pql manim_demo.py ManimFeatureDemo
 - `-p` : Preview the video after rendering
 - `-q` : Quality level
   - `-ql` : Low quality (480p, 15fps) - Fast rendering
-  - `-qm` : Medium quality (720p, 30fps) - **Recommended**
+  - `-qm` : Medium quality (720p, 30fps) - **Recommended minimum**
   - `-qh` : High quality (1080p, 60fps)
   - `-qk` : 4K quality (2160p, 60fps)
 
-### Recommended Command for 30fps Output
+### Manual Method (Advanced)
+
+If you prefer to activate the environment manually:
 
 ```bash
-manim -pqm manim_demo.py ManimFeatureDemo
-```
+# Activate the virtual environment
+.\venv\Scripts\Activate.ps1
 
-This renders at 720p resolution with 30fps and automatically opens the video when complete.
+# Run manim directly
+manim -pqm manim_demo.py ManimFeatureDemo
+
+# Deactivate when done
+deactivate
+```
 
 ## Output Location
 
@@ -71,6 +106,31 @@ rm -rf media/
 Or on Windows:
 ```cmd
 rmdir /s /q media
+```
+
+## Updating to Latest Manim Version
+
+This project is configured to always use the **latest version** of Manim CE.
+
+To update to the newest version:
+
+1. Run the setup script again:
+   ```bash
+   .\setup_venv.bat
+   ```
+
+2. When prompted "Do you want to recreate it?", type `y` and press Enter
+
+3. The script will:
+   - Remove the old virtual environment
+   - Create a fresh environment
+   - Install the latest Manim CE version
+   - Verify the installation
+
+**Or manually update:**
+```bash
+.\venv\Scripts\Activate.ps1
+pip install --upgrade manim
 ```
 
 ## Features Demonstrated
@@ -103,18 +163,37 @@ When working with this Manim project, follow these guidelines:
 
 ### General Principles
 
-1. **Always render at 30fps minimum** - Use `-qm` (medium quality, 30fps) or higher
-2. **Video output only** - Only produce video files in the `media/videos/` directory
-3. **No temporary files** - Manim handles cleanup automatically; never create additional temp files
-4. **Use Manim Community Edition** - Not ManimGL or other variants
-5. **Windows-only environment** - All commands should be Windows-compatible
+1. **Always use the virtual environment** - Use `run_manim.bat` script or activate `venv/` manually
+2. **Always render at 30fps minimum** - Use `-qm` (medium quality, 30fps) or higher
+3. **Video output only** - Only produce video files in the `media/videos/` directory
+4. **No temporary files** - Manim handles cleanup automatically; never create additional temp files
+5. **Use Manim Community Edition** - Not ManimGL or other variants (always latest version)
+6. **Windows-only environment** - All commands should be Windows-compatible
+
+### Environment Setup
+
+**First time setup:**
+```bash
+.\setup_venv.bat  # Creates venv and installs latest Manim CE
+```
+
+**To update to latest Manim version:**
+```bash
+.\setup_venv.bat  # Choose "yes" to recreate environment
+```
 
 ### Rendering Commands
 
-**DO use:**
+**DO use (with virtual environment):**
 ```bash
-manim -pqm manim_demo.py ManimFeatureDemo  # Medium quality, 30fps
-manim -pqh manim_demo.py ManimFeatureDemo  # High quality, 60fps
+run_manim.bat manim_demo.py ManimFeatureDemo -pqm  # Medium quality, 30fps
+run_manim.bat manim_demo.py ManimFeatureDemo -pqh  # High quality, 60fps
+```
+
+**OR manually activate venv:**
+```bash
+.\venv\Scripts\Activate.ps1
+manim -pqm manim_demo.py ManimFeatureDemo
 ```
 
 **DON'T use:**
@@ -122,6 +201,7 @@ manim -pqh manim_demo.py ManimFeatureDemo  # High quality, 60fps
 manim -pql ...  # Only 15fps, below minimum requirement
 manim -s ...    # Still images, not video
 manim --format=gif ...  # GIF format, not video
+pip install manim  # Don't install globally, use venv!
 ```
 
 ### File Management

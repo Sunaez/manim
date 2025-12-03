@@ -3,6 +3,10 @@ media/
 __pycache__/
 *.pyc
 
+# Virtual environment
+venv/
+env/
+
 # LaTeX intermediate files
 *.aux
 *.log
