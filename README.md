@@ -8,7 +8,7 @@ A comprehensive demonstration of Manim Community Edition features including text
 - Windows operating system
 - **Latest version** of Manim Community Edition (automatically installed)
 
-## Quick Start (Recommended)
+## Setup
 
 ### 1. Install Python
 
@@ -17,128 +17,95 @@ Download and install Python from [python.org](https://www.python.org/downloads/)
 
 ### 2. Set Up Virtual Environment
 
-Double-click `setup_venv.bat` or run in PowerShell:
+Run once to create the isolated environment:
 
-```bash
+```powershell
 .\setup_venv.bat
 ```
 
-This will:
-- ✅ Create an isolated Python virtual environment in `venv/`
-- ✅ Install the **latest version** of Manim CE automatically
-- ✅ Install all dependencies
-- ✅ Verify the installation
+This installs the **latest version** of Manim CE in a virtual environment.
 
-**This only needs to be run once!** (or when you want to update to the latest Manim version)
+## Usage
 
-### 3. Run the Demo
+### Step 1: Activate Virtual Environment
 
-**In PowerShell:**
-```bash
-.\run_manim.bat manim_demo.py ManimFeatureDemo -pqm
-```
+Every time you open a new terminal, activate the environment:
 
-**Or double-click** `run_manim.bat` and it will prompt you for the script and scene names.
-
-That's it! The animation will render and open automatically.
-
-## Running Animations
-
-### Using the Run Script (Recommended)
-
-The `run_manim.bat` script automatically uses the virtual environment.
-
-**In PowerShell (note the `.\` prefix):**
-```bash
-# Medium quality, 30fps (recommended)
-.\run_manim.bat manim_demo.py ManimFeatureDemo -pqm
-
-# High quality, 60fps
-.\run_manim.bat manim_demo.py ManimFeatureDemo -pqh
-
-# Low quality for quick tests
-.\run_manim.bat manim_demo.py ManimFeatureDemo -pql
-```
-
-**In Command Prompt (CMD):**
-```cmd
-# No .\ prefix needed in CMD
-run_manim.bat manim_demo.py ManimFeatureDemo -pqm
-```
-
-**Or just double-click** `run_manim.bat` (it will show usage help)
-
-### Command Options
-
-- `-p` : Preview the video after rendering
-- `-q` : Quality level
-  - `-ql` : Low quality (480p, 15fps) - Fast rendering
-  - `-qm` : Medium quality (720p, 30fps) - **Recommended minimum**
-  - `-qh` : High quality (1080p, 60fps)
-  - `-qk` : 4K quality (2160p, 60fps)
-
-### Manual Method (Advanced)
-
-If you prefer to activate the environment manually:
-
-```bash
-# Activate the virtual environment
+```powershell
 .\venv\Scripts\Activate.ps1
+```
 
-# Run manim directly
+You'll see `(venv)` appear in your prompt.
+
+### Step 2: Render Animations
+
+Use manim commands directly:
+
+```powershell
+# Medium quality, 30fps (recommended - meets 30fps minimum)
 manim -pqm manim_demo.py ManimFeatureDemo
 
-# Deactivate when done
+# High quality, 60fps
+manim -pqh manim_demo.py ManimFeatureDemo
+
+# 4K quality, 60fps
+manim -pqk manim_demo.py ManimFeatureDemo
+```
+
+**Note**: Don't use `-pql` (low quality) as it only renders at 15fps, below the 30fps minimum requirement.
+
+### Quality Options
+
+| Flag | Resolution | FPS | Preview | Use Case |
+|------|------------|-----|---------|----------|
+| `-pqm` | 720p | 30 | ✓ | **Recommended** - Minimum quality |
+| `-pqh` | 1080p | 60 | ✓ | High quality output |
+| `-pqk` | 2160p | 60 | ✓ | 4K production quality |
+| `-ql` | 480p | 15 | ✗ | ❌ Below 30fps minimum |
+
+**Flags explained:**
+- `-p` = Preview video after rendering
+- `-q` = Quality preset (l/m/h/k)
+
+### Step 3: Deactivate (Optional)
+
+When done:
+
+```powershell
 deactivate
 ```
 
 ## Output Location
 
-All video files are saved to:
+Videos are automatically saved to `media/videos/` with this structure:
+
 ```
-media/videos/manim_demo/720p30/ManimFeatureDemo.mp4
-```
-
-The path changes based on quality settings:
-- Low quality: `480p15/`
-- Medium quality: `720p30/`
-- High quality: `1080p60/`
-
-## Cleaning Temporary Files
-
-Manim automatically cleans up temporary files during rendering. The only output is the final video file in the `media/videos` directory.
-
-To manually clean all generated files:
-```bash
-rm -rf media/
+media/videos/manim_demo/
+├── 720p30/ManimFeatureDemo.mp4    # Medium quality (-pqm)
+├── 1080p60/ManimFeatureDemo.mp4   # High quality (-pqh)
+└── 2160p60/ManimFeatureDemo.mp4   # 4K quality (-pqk)
 ```
 
-Or on Windows:
-```cmd
-rmdir /s /q media
+**Temporary files are automatically cleaned** - only the final video remains.
+
+To manually remove all output:
+
+```powershell
+Remove-Item -Recurse -Force media
 ```
 
 ## Updating to Latest Manim Version
 
-This project is configured to always use the **latest version** of Manim CE.
+To update to the newest version of Manim CE:
 
-To update to the newest version:
+**Option 1: Recreate environment (recommended)**
+```powershell
+.\setup_venv.bat
+# Choose "y" when prompted to recreate
+```
 
-1. Run the setup script again:
-   ```bash
-   .\setup_venv.bat
-   ```
-
-2. When prompted "Do you want to recreate it?", type `y` and press Enter
-
-3. The script will:
-   - Remove the old virtual environment
-   - Create a fresh environment
-   - Install the latest Manim CE version
-   - Verify the installation
-
-**Or manually update:**
-```bash
+**Option 2: Upgrade manually**
+```powershell
 .\venv\Scripts\Activate.ps1
 pip install --upgrade manim
 ```
@@ -169,60 +136,57 @@ The main scene `ManimFeatureDemo` contains multiple sub-scenes:
 
 ## Instructions for AI Assistants / Chatbots
 
-When working with this Manim project, follow these guidelines:
+When working with this Manim project, follow these rules:
 
-### General Principles
+### Core Requirements
 
-1. **Always use the virtual environment** - Use `run_manim.bat` script or activate `venv/` manually
-2. **Always render at 30fps minimum** - Use `-qm` (medium quality, 30fps) or higher
-3. **Video output only** - Only produce video files in the `media/videos/` directory
-4. **No temporary files** - Manim handles cleanup automatically; never create additional temp files
-5. **Use Manim Community Edition** - Not ManimGL or other variants (always latest version)
-6. **Windows-only environment** - All commands should be Windows-compatible
+1. **30fps minimum** - Always use `-pqm`, `-pqh`, or `-pqk` (never `-pql`)
+2. **Video output only** - No images, no GIFs, only `.mp4` files in `media/videos/`
+3. **Latest Manim CE** - Always use the virtual environment with latest version
+4. **No temporary files** - Manim automatically cleans up, don't create extra files
+5. **Windows PowerShell** - All commands for Windows environment
 
-### Environment Setup
+### Workflow
 
-**First time setup:**
-```bash
-.\setup_venv.bat  # Creates venv and installs latest Manim CE
+**Before rendering (first time only):**
+```powershell
+.\setup_venv.bat  # Sets up venv with latest Manim CE
 ```
 
-**To update to latest Manim version:**
-```bash
-.\setup_venv.bat  # Choose "yes" to recreate environment
-```
-
-### Rendering Commands
-
-**DO use (with virtual environment in PowerShell):**
-```bash
-.\run_manim.bat manim_demo.py ManimFeatureDemo -pqm  # Medium quality, 30fps
-.\run_manim.bat manim_demo.py ManimFeatureDemo -pqh  # High quality, 60fps
-```
-
-**OR manually activate venv:**
-```bash
+**Every rendering session:**
+```powershell
+# 1. Activate environment
 .\venv\Scripts\Activate.ps1
-manim -pqm manim_demo.py ManimFeatureDemo
+
+# 2. Render with manim directly
+manim -pqm script.py SceneName   # 30fps minimum
+manim -pqh script.py SceneName   # 60fps high quality
+manim -pqk script.py SceneName   # 60fps 4K quality
 ```
 
-**DON'T use:**
-```bash
-manim -pql ...  # Only 15fps, below minimum requirement
-manim -s ...    # Still images, not video
-manim --format=gif ...  # GIF format, not video
-pip install manim  # Don't install globally, use venv!
-run_manim.bat ...  # Missing .\ prefix in PowerShell
+### Allowed Commands
+
+✅ **DO use:**
+- `manim -pqm` (720p, 30fps) - **Minimum acceptable**
+- `manim -pqh` (1080p, 60fps)
+- `manim -pqk` (2160p, 60fps)
+
+❌ **DON'T use:**
+- `manim -pql` (Only 15fps - below minimum)
+- `manim -s` (Still images, not video)
+- `manim --format=gif` (GIF format, not video)
+- Any command without activating venv first
+
+### Output Structure
+
+Videos save to: `media/videos/[script_name]/[quality]/[SceneName].mp4`
+
+Example:
+```
+media/videos/manim_demo/720p30/ManimFeatureDemo.mp4
 ```
 
-**Note**: PowerShell requires `.\` prefix for scripts in the current directory. CMD does not.
-
-### File Management
-
-- **Output directory**: `media/videos/[filename]/[quality]/[SceneName].mp4`
-- **Temporary files**: Automatically managed by Manim, no manual intervention needed
-- **Partial renders**: Not allowed - always render complete scenes
-- **Cache**: Manim uses `.media_cache/` but cleans it automatically
+Temporary files are auto-cleaned. Only final video remains.
 
 ### Code Guidelines
 
@@ -272,14 +236,15 @@ manim -pqm manim_demo.py ManimFeatureDemo
 ### Troubleshooting
 
 **If rendering fails:**
-1. Check LaTeX is installed for `MathTex()` usage
-2. Verify all imports are from `manim` package
-3. Ensure Python 3.8+ is being used
-4. Check that scene class name matches command
+1. Ensure virtual environment is activated (`.\venv\Scripts\Activate.ps1`)
+2. Check LaTeX is installed for `MathTex()` usage
+3. Verify all imports are from `manim` package
+4. Ensure Python 3.8+ is being used
+5. Check that scene class name matches command
 
-**Performance issues:**
-- Use `-ql` for quick previews during development
-- Use `-qm` or `-qh` for final output
+**For faster development iterations:**
+- Use `-qm` (30fps, 720p) for quick previews - still meets minimum requirements
+- Use `-qh` or `-qk` for final production output
 - Avoid creating thousands of objects in a single scene
 
 ### Output Verification
