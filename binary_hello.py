@@ -6,20 +6,18 @@ class BinaryToText(Scene):
         # H=01001000, e=01100101, l=01101100, l=01101100, o=01101111
         binary_string = "01001000 01100101 01101100 01101100 01101111"
 
-        # Create title using Tex for LaTeX formatting
-        title = Tex(r"\textbf{Binary to Text Decoder}", font_size=48).to_edge(UP)
+        # Create title using Text (no LaTeX)
+        title = Text("Binary to Text Decoder", font_size=48).to_edge(UP)
         self.play(Write(title))
         self.wait(0.5)
 
-        # Create the binary text using Tex for monospace formatting
-        binary_text = Tex(
-            r"\texttt{01001000}", r"\;",
-            r"\texttt{01100101}", r"\;",
-            r"\texttt{01101100}", r"\;",
-            r"\texttt{01101100}", r"\;",
-            r"\texttt{01101111}",
-            font_size=36
-        )
+        # Create the binary text using Text with monospace
+        binary_parts = []
+        for byte in binary_string.split():
+            binary_parts.append(Text(byte, font_size=36, font="Monospace"))
+
+        binary_text = VGroup(*binary_parts)
+        binary_text.arrange(RIGHT, buff=0.3)
         binary_text.move_to(ORIGIN + RIGHT * 8)  # Start off-screen to the right
 
         # Create the read header (a rectangular frame)
@@ -69,12 +67,11 @@ class BinaryToText(Scene):
         self.wait(0.3)
 
         # Move binary through the read header
-        # Since Tex creates separate submobjects, we get the indices of actual binary bytes (even indices)
-        binary_indices = [0, 2, 4, 6, 8]  # Indices of binary bytes in Tex
+        # binary_text is now a VGroup of Text objects (one per byte)
 
-        for i, (binary_idx, binary_byte, letter) in enumerate(zip(binary_indices, binary_groups, letters)):
+        for i, (binary_byte, letter) in enumerate(zip(binary_groups, letters)):
             # Get the position of the current binary byte
-            current_byte = binary_text[binary_idx]
+            current_byte = binary_text[i]
 
             # Calculate how much to shift to center this byte in the read header
             byte_center = current_byte.get_center()[0]
@@ -101,17 +98,10 @@ class BinaryToText(Scene):
                 run_time=0.2
             )
 
-            # Show binary to decimal conversion using MathTex (equation)
+            # Show binary to decimal conversion using Text (no LaTeX)
             decimal_value = int(binary_byte, 2)
-            conversion = MathTex(
-                r"\texttt{" + binary_byte + r"}_2",
-                r"=",
-                str(decimal_value) + r"_{10}",
-                r"=",
-                r"\text{``" + letter + r"''}",
-                font_size=28,
-                color=ORANGE
-            )
+            conversion_text = f"{binary_byte} = {decimal_value} = '{letter}'"
+            conversion = Text(conversion_text, font_size=28, color=ORANGE)
             conversion.next_to(read_header, RIGHT, buff=0.5)
             self.play(FadeIn(conversion, shift=LEFT * 0.3), run_time=0.4)
             self.wait(0.3)
@@ -141,13 +131,13 @@ class BinaryToText(Scene):
         # Final wait to show complete result
         self.wait(1)
 
-        # Add completion checkmark using MathTex (math symbol/equation)
-        checkmark = MathTex(r"\checkmark", font_size=72, color=GREEN)
+        # Add completion checkmark using Text (unicode checkmark)
+        checkmark = Text("✓", font_size=72, color=GREEN)
         checkmark.next_to(output_text, RIGHT, buff=0.3)
 
-        # Highlight the final output with Tex (LaTeX formatting)
-        final_text = Tex(
-            r"\Large\textbf{Decoded: ``Hello''}",
+        # Highlight the final output with Text (no LaTeX)
+        final_text = Text(
+            'Decoded: "Hello"',
             font_size=48,
             color=BLUE
         )

@@ -9,7 +9,7 @@ class GPUComputeDemo(Scene):
 
     def construct(self):
         # Title
-        title = Tex(r"\textbf{GPU Compute Power Demo}", font_size=48, color=YELLOW)
+        title = Text("GPU Compute Power Demo", font_size=48, color=YELLOW)
         title.to_edge(UP)
 
         subtitle = Text(
@@ -56,8 +56,8 @@ class GPUComputeDemo(Scene):
             particles.add(particle)
 
         # Show particle count
-        particle_count = MathTex(
-            r"\text{Particles: } 2000",
+        particle_count = Text(
+            "Particles: 2000",
             font_size=32,
             color=ORANGE
         ).to_corner(UR)
@@ -203,8 +203,8 @@ class GPUComputeDemo(Scene):
             FadeOut(gpu_info)
         )
 
-        fractal_label = MathTex(
-            r"\text{Fractal Pattern: } 800 \text{ points}",
+        fractal_label = Text(
+            "Fractal Pattern: 800 points",
             font_size=32,
             color=YELLOW
         ).to_edge(DOWN)
@@ -237,13 +237,13 @@ class GPUComputeDemo(Scene):
         )
 
         final_stats = VGroup(
-            Text("GPU Performance Metrics:", font_size=32, color=YELLOW, weight=BOLD),
+            Text("GPU Performance Metrics:", font_size=32, color=YELLOW),
             Text("✓ 2000+ particles rendered", font_size=24, color=GREEN),
             Text("✓ Real-time physics simulation", font_size=24, color=GREEN),
             Text("✓ Complex vortex calculations", font_size=24, color=GREEN),
             Text("✓ 800-point fractal generation", font_size=24, color=GREEN),
             Text("✓ Parallel color transformations", font_size=24, color=GREEN),
-            Tex(r"\textbf{Total objects: 2800+}", font_size=28, color=RED)
+            Text("Total objects: 2800+", font_size=28, color=RED)
         ).arrange(DOWN, aligned_edge=LEFT, buff=0.25)
 
         final_stats.move_to(ORIGIN)

@@ -4,7 +4,7 @@ import numpy as np
 class GPUShaderDemo(Scene):
     def construct(self):
         # Title
-        title = Tex(r"\textbf{CPU vs GPU Performance Comparison}", font_size=48)
+        title = Text("CPU vs GPU Performance Comparison", font_size=48)
         title.to_edge(UP)
         self.play(Write(title))
         self.wait(0.5)
@@ -16,10 +16,10 @@ class GPUShaderDemo(Scene):
         self.wait(0.5)
 
         # Create two comparison boxes
-        cpu_label = Text("CPU Rendering", font_size=32, color=RED, weight=BOLD)
+        cpu_label = Text("CPU Rendering", font_size=32, color=RED)
         cpu_label.move_to(LEFT * 3.5 + UP * 2)
 
-        gpu_label = Text("GPU Rendering", font_size=32, color=GREEN, weight=BOLD)
+        gpu_label = Text("GPU Rendering", font_size=32, color=GREEN)
         gpu_label.move_to(RIGHT * 3.5 + UP * 2)
 
         self.play(
@@ -133,7 +133,7 @@ class GPUShaderDemo(Scene):
         )
 
         # GPU done marker
-        gpu_done = MathTex(r"\checkmark", font_size=60, color=GREEN)
+        gpu_done = Text("✓", font_size=60, color=GREEN)
         gpu_done.move_to(gpu_box.get_center())
         self.play(FadeIn(gpu_done, scale=2))
 
@@ -143,7 +143,7 @@ class GPUShaderDemo(Scene):
             run_time=4
         )
 
-        cpu_done = MathTex(r"\checkmark", font_size=60, color=RED)
+        cpu_done = Text("✓", font_size=60, color=RED)
         cpu_done.move_to(cpu_box.get_center())
         self.play(FadeIn(cpu_done, scale=2))
 
@@ -151,9 +151,9 @@ class GPUShaderDemo(Scene):
 
         # Show timing comparison
         timing_text = VGroup(
-            Text("GPU: 2 seconds", font_size=28, color=GREEN, weight=BOLD),
-            Text("CPU: 6 seconds", font_size=28, color=RED, weight=BOLD),
-            Tex(r"\textbf{Speedup: 3x}", font_size=32, color=YELLOW)
+            Text("GPU: 2 seconds", font_size=28, color=GREEN),
+            Text("CPU: 6 seconds", font_size=28, color=RED),
+            Text("Speedup: 3x", font_size=32, color=YELLOW)
         ).arrange(DOWN, buff=0.3)
         timing_text.move_to(DOWN * 3)
 
