@@ -1,0 +1,27 @@
+# Manim output directories
+media/
+__pycache__/
+*.pyc
+
+# Virtual environment
+venv/
+env/
+
+# LaTeX intermediate files
+*.aux
+*.log
+*.dvi
+*.ps
+*.pdf
+*.synctex.gz
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
