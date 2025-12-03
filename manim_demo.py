@@ -1,4 +1,5 @@
 from manim import *
+import random
 
 config.frame_rate = 30  # Ensure 30fps minimum
 
