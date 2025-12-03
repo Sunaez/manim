@@ -33,11 +33,12 @@ This will:
 
 ### 3. Run the Demo
 
-Double-click the batch file or run:
-
+**In PowerShell:**
 ```bash
-run_manim.bat manim_demo.py ManimFeatureDemo -pqm
+.\run_manim.bat manim_demo.py ManimFeatureDemo -pqm
 ```
+
+**Or double-click** `run_manim.bat` and it will prompt you for the script and scene names.
 
 That's it! The animation will render and open automatically.
 
@@ -45,18 +46,27 @@ That's it! The animation will render and open automatically.
 
 ### Using the Run Script (Recommended)
 
-The `run_manim.bat` script automatically uses the virtual environment:
+The `run_manim.bat` script automatically uses the virtual environment.
 
+**In PowerShell (note the `.\` prefix):**
 ```bash
 # Medium quality, 30fps (recommended)
-run_manim.bat manim_demo.py ManimFeatureDemo -pqm
+.\run_manim.bat manim_demo.py ManimFeatureDemo -pqm
 
 # High quality, 60fps
-run_manim.bat manim_demo.py ManimFeatureDemo -pqh
+.\run_manim.bat manim_demo.py ManimFeatureDemo -pqh
 
 # Low quality for quick tests
-run_manim.bat manim_demo.py ManimFeatureDemo -pql
+.\run_manim.bat manim_demo.py ManimFeatureDemo -pql
 ```
+
+**In Command Prompt (CMD):**
+```cmd
+# No .\ prefix needed in CMD
+run_manim.bat manim_demo.py ManimFeatureDemo -pqm
+```
+
+**Or just double-click** `run_manim.bat` (it will show usage help)
 
 ### Command Options
 
@@ -184,10 +194,10 @@ When working with this Manim project, follow these guidelines:
 
 ### Rendering Commands
 
-**DO use (with virtual environment):**
+**DO use (with virtual environment in PowerShell):**
 ```bash
-run_manim.bat manim_demo.py ManimFeatureDemo -pqm  # Medium quality, 30fps
-run_manim.bat manim_demo.py ManimFeatureDemo -pqh  # High quality, 60fps
+.\run_manim.bat manim_demo.py ManimFeatureDemo -pqm  # Medium quality, 30fps
+.\run_manim.bat manim_demo.py ManimFeatureDemo -pqh  # High quality, 60fps
 ```
 
 **OR manually activate venv:**
@@ -202,7 +212,10 @@ manim -pql ...  # Only 15fps, below minimum requirement
 manim -s ...    # Still images, not video
 manim --format=gif ...  # GIF format, not video
 pip install manim  # Don't install globally, use venv!
+run_manim.bat ...  # Missing .\ prefix in PowerShell
 ```
+
+**Note**: PowerShell requires `.\` prefix for scripts in the current directory. CMD does not.
 
 ### File Management
 
