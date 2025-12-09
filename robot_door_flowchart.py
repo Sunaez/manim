@@ -171,7 +171,7 @@ class RobotDoorFlowchart(MovingCameraScene):
 
         # Vertical spacing between elements
         v_gap = 0.6
-        h_offset = 2.5  # Horizontal offset for branches
+        h_offset = 3.8  # Horizontal offset for branches (wider to avoid clipping)
 
         # Build the flowchart - all elements positioned vertically
         # We'll create everything first, then animate with camera movement
@@ -286,20 +286,21 @@ class RobotDoorFlowchart(MovingCameraScene):
                   color=self.ARROW_COLOR, stroke_width=3, buff=0)
         )
 
-        # No loop - back to Push/Pull decision
+        # No loop - back to Push/Pull decision (positioned further right to avoid clipping)
+        loop_offset = 5.5  # Distance to the right for the loop
         no_loop = VGroup(
             Line(open_q.get_right() + DOWN * 0.2,
-                 open_q.get_right() + RIGHT * 1.8 + DOWN * 0.2,
+                 open_q.get_right() + RIGHT * loop_offset + DOWN * 0.2,
                  color=self.ARROW_COLOR, stroke_width=3),
-            Line(open_q.get_right() + RIGHT * 1.8 + DOWN * 0.2,
-                 push_pull_q.get_right() + RIGHT * 1.8,
+            Line(open_q.get_right() + RIGHT * loop_offset + DOWN * 0.2,
+                 push_pull_q.get_right() + RIGHT * loop_offset,
                  color=self.ARROW_COLOR, stroke_width=3),
-            Arrow(push_pull_q.get_right() + RIGHT * 1.8,
+            Arrow(push_pull_q.get_right() + RIGHT * loop_offset,
                   push_pull_q.get_right() + RIGHT * 0.1,
                   color=self.ARROW_COLOR, stroke_width=3, buff=0)
         )
         no2 = Text("No (retry)", font_size=14, color=self.LABEL_NO, weight=BOLD)
-        no2.move_to(open_q.get_right() + RIGHT * 1.0 + DOWN * 0.05)
+        no2.move_to(open_q.get_right() + RIGHT * (loop_offset / 2) + DOWN * 0.05)
 
         current_y -= 1.5
 
