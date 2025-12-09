@@ -286,22 +286,6 @@ class RobotDoorFlowchart(MovingCameraScene):
                   color=self.ARROW_COLOR, stroke_width=3, buff=0)
         )
 
-        # No loop - back to Push/Pull decision (positioned further right to avoid clipping)
-        loop_offset = 5.5  # Distance to the right for the loop
-        no_loop = VGroup(
-            Line(open_q.get_right() + DOWN * 0.2,
-                 open_q.get_right() + RIGHT * loop_offset + DOWN * 0.2,
-                 color=self.ARROW_COLOR, stroke_width=3),
-            Line(open_q.get_right() + RIGHT * loop_offset + DOWN * 0.2,
-                 push_pull_q.get_right() + RIGHT * loop_offset,
-                 color=self.ARROW_COLOR, stroke_width=3),
-            Arrow(push_pull_q.get_right() + RIGHT * loop_offset,
-                  push_pull_q.get_right() + RIGHT * 0.1,
-                  color=self.ARROW_COLOR, stroke_width=3, buff=0)
-        )
-        no2 = Text("No (retry)", font_size=14, color=self.LABEL_NO, weight=BOLD)
-        no2.move_to(open_q.get_right() + RIGHT * (loop_offset / 2) + DOWN * 0.05)
-
         current_y -= 1.5
 
         # Process: Move through
@@ -318,49 +302,41 @@ class RobotDoorFlowchart(MovingCameraScene):
         end.move_to(UP * current_y)
         arr_move_end = self.create_arrow(move.get_bottom(), end.get_top())
 
-        # Group all elements for easier manipulation
-        all_elements = VGroup(
-            start, arr_start_approach,
-            approach, arr_approach_detect,
-            detect, arr_detect_locked,
-            locked_q, arr_locked_unlock, yes1, unlock, unlock_join,
-            arr_locked_grip, no1, grip, arr_grip_turn,
-            turn, arr_turn_pp,
-            push_pull_q, arr_pp_push, push_lbl, push_door,
-            arr_pp_pull, pull_lbl, pull_door,
-            push_to_open, pull_to_open,
-            open_q, no_loop, no2,
-            arr_open_move, yes2, move,
-            arr_move_end, end
-        )
-
-        # Animate step by step with camera scrolling
+        # Animate step by step - camera centers on each new element
 
         # Step 1: START
+        self.play(
+            self.camera.frame.animate.move_to(start.get_center()),
+            run_time=0.5
+        )
         self.play(FadeIn(start, scale=0.8), run_time=1.0)
         self.wait(1)
 
         # Step 2: Approach door
         self.play(Create(arr_start_approach), run_time=0.8)
-        self.play(FadeIn(approach, scale=0.8), run_time=1.0)
-        self.wait(1)
-
-        # Step 3: Detect handle - scroll down slightly
         self.play(
-            Create(arr_approach_detect),
-            self.camera.frame.animate.shift(DOWN * 0.5),
+            FadeIn(approach, scale=0.8),
+            self.camera.frame.animate.move_to(approach.get_center()),
             run_time=1.0
         )
-        self.play(FadeIn(detect, scale=0.8), run_time=1.0)
         self.wait(1)
 
-        # Step 4: Locked? decision - scroll down
+        # Step 3: Detect handle
+        self.play(Create(arr_approach_detect), run_time=0.8)
         self.play(
-            Create(arr_detect_locked),
-            self.camera.frame.animate.shift(DOWN * 0.6),
+            FadeIn(detect, scale=0.8),
+            self.camera.frame.animate.move_to(detect.get_center()),
             run_time=1.0
         )
-        self.play(FadeIn(locked_q, scale=0.8), run_time=1.0)
+        self.wait(1)
+
+        # Step 4: Locked? decision
+        self.play(Create(arr_detect_locked), run_time=0.8)
+        self.play(
+            FadeIn(locked_q, scale=0.8),
+            self.camera.frame.animate.move_to(locked_q.get_center()),
+            run_time=1.0
+        )
         self.wait(1)
 
         # Step 5: Yes branch - Unlock door
@@ -369,37 +345,44 @@ class RobotDoorFlowchart(MovingCameraScene):
             FadeIn(yes1),
             run_time=1.0
         )
-        self.play(FadeIn(unlock, scale=0.8), run_time=1.0)
+        self.play(
+            FadeIn(unlock, scale=0.8),
+            self.camera.frame.animate.move_to(unlock.get_center()),
+            run_time=1.0
+        )
         self.wait(0.8)
         self.play(Create(unlock_join), run_time=0.8)
         self.wait(0.5)
 
-        # Step 6: No branch - Grip handle - scroll down
+        # Step 6: No branch - Grip handle
         self.play(
             Create(arr_locked_grip),
             FadeIn(no1),
-            self.camera.frame.animate.shift(DOWN * 0.7),
             run_time=1.0
         )
-        self.play(FadeIn(grip, scale=0.8), run_time=1.0)
+        self.play(
+            FadeIn(grip, scale=0.8),
+            self.camera.frame.animate.move_to(grip.get_center()),
+            run_time=1.0
+        )
         self.wait(1)
 
-        # Step 7: Turn handle - scroll down
+        # Step 7: Turn handle
+        self.play(Create(arr_grip_turn), run_time=0.8)
         self.play(
-            Create(arr_grip_turn),
-            self.camera.frame.animate.shift(DOWN * 0.5),
+            FadeIn(turn, scale=0.8),
+            self.camera.frame.animate.move_to(turn.get_center()),
             run_time=1.0
         )
-        self.play(FadeIn(turn, scale=0.8), run_time=1.0)
         self.wait(1)
 
-        # Step 8: Push or Pull? decision - scroll down
+        # Step 8: Push or Pull? decision
+        self.play(Create(arr_turn_pp), run_time=0.8)
         self.play(
-            Create(arr_turn_pp),
-            self.camera.frame.animate.shift(DOWN * 0.7),
+            FadeIn(push_pull_q, scale=0.8),
+            self.camera.frame.animate.move_to(push_pull_q.get_center()),
             run_time=1.0
         )
-        self.play(FadeIn(push_pull_q, scale=0.8), run_time=1.0)
         self.wait(1)
 
         # Step 9: Push and Pull branches
@@ -417,52 +400,50 @@ class RobotDoorFlowchart(MovingCameraScene):
         )
         self.wait(1)
 
-        # Step 10: Converge to Door open? - scroll down
+        # Step 10: Converge to Door open?
         self.play(
             Create(push_to_open),
             Create(pull_to_open),
-            self.camera.frame.animate.shift(DOWN * 0.8),
             run_time=1.2
         )
-        self.play(FadeIn(open_q, scale=0.8), run_time=1.0)
-        self.wait(1)
-
-        # Step 11: No loop (retry)
         self.play(
-            Create(no_loop),
-            FadeIn(no2),
-            run_time=1.2
+            FadeIn(open_q, scale=0.8),
+            self.camera.frame.animate.move_to(open_q.get_center()),
+            run_time=1.0
         )
         self.wait(1)
 
-        # Step 12: Yes path - Move through - scroll down
+        # Step 11: Yes path - Move through
         self.play(
             Create(arr_open_move),
             FadeIn(yes2),
-            self.camera.frame.animate.shift(DOWN * 0.6),
             run_time=1.0
         )
-        self.play(FadeIn(move, scale=0.8), run_time=1.0)
+        self.play(
+            FadeIn(move, scale=0.8),
+            self.camera.frame.animate.move_to(move.get_center()),
+            run_time=1.0
+        )
         self.wait(1)
 
-        # Step 13: END - scroll down
+        # Step 12: END
+        self.play(Create(arr_move_end), run_time=0.8)
         self.play(
-            Create(arr_move_end),
-            self.camera.frame.animate.shift(DOWN * 0.5),
+            FadeIn(end, scale=0.8),
+            self.camera.frame.animate.move_to(end.get_center()),
             run_time=1.0
         )
-        self.play(FadeIn(end, scale=0.8), run_time=1.0)
         self.wait(2)
 
-        # Final view: Scroll back up to show entire diagram
+        # Final view: Zoom out to show entire diagram (START at top, END at bottom)
         self.play(
             FadeOut(header),
             run_time=1.0
         )
 
-        # Calculate center of diagram and zoom out to show all
+        # Calculate center and height to fit full diagram
         diagram_center = (start.get_center() + end.get_center()) / 2
-        diagram_height = start.get_center()[1] - end.get_center()[1] + 3
+        diagram_height = start.get_center()[1] - end.get_center()[1] + 2
 
         self.play(
             self.camera.frame.animate.move_to(diagram_center).set(height=diagram_height + 1),
