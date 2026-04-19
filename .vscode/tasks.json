@@ -2,32 +2,10 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Render FloatingPointStory: Low",
+      "label": "Render FloatingPointStory",
       "type": "shell",
       "command": "python",
-      "args": ["animations/floating_point_story.py", "--quality", "low"],
-      "group": "build",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated"
-      }
-    },
-    {
-      "label": "Render FloatingPointStory: Medium",
-      "type": "shell",
-      "command": "python",
-      "args": ["animations/floating_point_story.py", "--quality", "medium"],
-      "group": "build",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated"
-      }
-    },
-    {
-      "label": "Render FloatingPointStory: High",
-      "type": "shell",
-      "command": "python",
-      "args": ["animations/floating_point_story.py", "--quality", "high"],
+      "args": ["animations/floating_point_story.py"],
       "group": "build",
       "presentation": {
         "reveal": "always",

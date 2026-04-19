@@ -35,7 +35,7 @@ It shows four parts:
 
 ## VS Code Run Button
 
-The script supports quality selection through an argument so the VS Code Run button can launch different presets.
+The script reads its quality preset from the source file.
 The default play button workflow should stay on the medium preset: 720p at 30fps.
 
 Available options:
@@ -49,7 +49,7 @@ Available options:
 From the terminal:
 
 ```powershell
-python animations/floating_point_story.py --quality medium
+python animations/floating_point_story.py
 ```
 
 Or render directly with Manim:
@@ -60,6 +60,8 @@ manim -pqm animations/floating_point_story.py FloatingPointStory
 
 ## Notes for Rendering
 
-- Keep `config.frame_rate = 30` or higher in the source.
+- Put `FRAME_RATE` and `RENDER_QUALITY` at the top of each animation file.
+- Set `config.frame_rate` from `FRAME_RATE`.
+- Set `RENDER_QUALITY` to `medium` by default and add short comments near it explaining `low`, `medium`, and `high`.
 - Prefer the dark blue visual language for new scenes.
 - Keep explanations beginner-friendly and visually driven.

@@ -40,16 +40,27 @@ The main script supports these quality options:
 - `high` = 1080p, 60fps
 
 When adding new scenes or instructions, preserve these presets and keep the run button workflow compatible with them.
+At the top of every animation file, define exactly these two variables:
+
+- `FRAME_RATE` for the scene frame rate
+- `RENDER_QUALITY` for the chosen render preset
+
+Keep `RENDER_QUALITY = "medium"` by default and add short comments in the source explaining:
+
+- `low` = 480p, 30fps preview
+- `medium` = 1280x720, 30fps
+- `high` = 1080p, 60fps
 
 ## Implementation Rules
 
-- Use `config.frame_rate = 30` or higher.
+- Set `config.frame_rate` from the top-level `FRAME_RATE` variable.
 - Keep the dark blue theme in every scene.
 - Apply the same dark-mode palette across new scenes unless a scene has a strong reason to vary it.
 - Prefer `Text()` for regular prose and `MathTex()` for formulas.
 - Keep the scene names stable so VS Code launch configs remain valid.
 - Keep the repository organized so each animation lives in its own clearly named file inside `animations/`.
 - The default VS Code play button should render the medium preset at 720p and 30fps.
+- Use the top-level `RENDER_QUALITY` variable in `render_scene()` so the quality can be changed directly in the file.
 - Use the Manim Community documentation as the primary reference when writing or editing scenes:
   - https://docs.manim.community/en/stable/
 - Check the docs before using lesser-known classes, animation helpers, or render flags so the code stays accurate and idiomatic.

@@ -1,11 +1,16 @@
 from pathlib import Path
-import argparse
 import subprocess
 import sys
 
 from manim import *
 
-config.frame_rate = 30
+FRAME_RATE = 30
+RENDER_QUALITY = "medium"
+# low: 480p, 30fps preview render.
+# medium: 720p, 30fps default render.
+# high: 1080p, 60fps final render.
+
+config.frame_rate = FRAME_RATE
 
 
 class VendingMachineDFD(Scene):
@@ -212,29 +217,26 @@ MUTED = "#cbd5e1"
 
 def render_scene():
     script_path = Path(__file__).resolve()
-    parser = argparse.ArgumentParser(description="Render the VendingMachineDFD Manim scene.")
-    parser.add_argument(
-        "--quality",
-        choices=["low", "medium", "high"],
-        default="medium",
-        help="Render quality preset.",
-    )
-    args = parser.parse_args()
+    command = [
+        sys.executable,
+        "-m",
+        "manim",
+        *quality_args(RENDER_QUALITY),
+        str(script_path),
+        "VendingMachineDFD",
+    ]
+    raise SystemExit(subprocess.call(command))
 
+
+def quality_args(name):
     quality_map = {
         "low": ["-p", "--fps", "30", "-r", "854,480"],
         "medium": ["-pqm"],
         "high": ["-p", "--fps", "60", "-r", "1920,1080"],
     }
-    command = [
-        sys.executable,
-        "-m",
-        "manim",
-        *quality_map[args.quality],
-        str(script_path),
-        "VendingMachineDFD",
-    ]
-    raise SystemExit(subprocess.call(command))
+    if name not in quality_map:
+        raise ValueError(f"Unsupported RENDER_QUALITY: {name!r}")
+    return quality_map[name]
 
 
 if __name__ == "__main__":

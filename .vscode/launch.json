@@ -6,17 +6,7 @@
       "type": "python",
       "request": "launch",
       "program": "${workspaceFolder}/animations/floating_point_story.py",
-      "console": "integratedTerminal",
-      "args": ["--quality", "${input:renderQuality}"]
-    }
-  ],
-  "inputs": [
-    {
-      "id": "renderQuality",
-      "type": "pickString",
-      "description": "Choose render quality",
-      "options": ["low", "medium", "high"],
-      "default": "medium"
+      "console": "integratedTerminal"
     }
   ]
 }
