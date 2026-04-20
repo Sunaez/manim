@@ -5,26 +5,26 @@ import sys
 import numpy as np
 
 from manim import *
+from palette import apply_palette
 
-FRAME_RATE = 30
 RENDER_QUALITY = "high"
-# low: 480p, 30fps preview render.
-# medium: 720p, 30fps default render.
-# high: 1920x1080, 60fps final render.
+# Choose one of: Dark, Light, Sepia.
+# low: 480p preview render.
+# medium: 720p default render.
+# high: 1080p final render.
 
-config.frame_rate = FRAME_RATE
-
-BACKGROUND = "#0f172a"
-SURFACE = "#1e293b"
-SURFACE_ALT = "#334155"
-PRIMARY_BLUE = "#3b82f6"
-TEAL = "#14b8a6"
-GREEN = "#22c55e"
-ORANGE = "#f59e0b"
-RED = "#ef4444"
-GOLD = "#eab308"
-TEXT = "#f8fafc"
-MUTED = "#cbd5e1"
+P = apply_palette("Sepia")
+BACKGROUND = P.BG_0
+SURFACE = P.BG_1
+SURFACE_ALT = P.BG_3
+PRIMARY_BLUE = P.BLUE
+TEAL = P.TEAL
+GREEN = P.GREEN
+ORANGE = P.AMBER
+RED = P.RED
+GOLD = P.YELLOW
+TEXT = P.TEXT_PRIMARY
+MUTED = P.TEXT_SECONDARY
 
 
 class ToasterBlackBox(Scene):
@@ -324,9 +324,9 @@ def render_scene():
 
 def quality_args(name):
     quality_map = {
-        "low": ["-p", "--fps", "30", "-r", "854,480"],
-        "medium": ["-pqm"],
-        "high": ["-p", "--fps", "60", "-r", "1920,1080"],
+        "low": ["-ql"],
+        "medium": ["-qm"],
+        "high": ["-qh"],
     }
     if name not in quality_map:
         raise ValueError(f"Unsupported RENDER_QUALITY: {name!r}")

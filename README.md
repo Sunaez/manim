@@ -6,12 +6,15 @@ The repository is organized so each animation lives in its own clearly named fil
 
 ## Visual Theme
 
-All videos in this project should use a dark blue theme:
+All videos in this project should use the shared palette helper with one of these scheme names:
 
-- Background: `#0f172a`
-- Surface blocks: `#1e293b`
-- Accents: blue `#3b82f6`, teal `#14b8a6`, green `#22c55e`, orange `#f59e0b`, red `#ef4444`, gold `#eab308`
-- Text: keep it minimal and high-contrast
+- `Dark`
+- `Light`
+- `Sepia`
+
+Default to `Dark` unless a scene intentionally needs a different tone.
+
+- Keep text minimal and high-contrast
 - Motion: smooth transitions, gentle zooms, and clear labels
 
 ## Animation Rules
@@ -36,13 +39,13 @@ It shows four parts:
 ## VS Code Run Button
 
 The script reads its quality preset from the source file.
-The default play button workflow should stay on the medium preset: 720p at 30fps.
+The default play button workflow should stay on the medium preset.
 
 Available options:
 
-- `low` = 480p, 30fps preview
-- `medium` = 1280x720, 30fps
-- `high` = 1080p, 60fps
+- `low` = preview quality
+- `medium` = standard render quality
+- `high` = final render quality
 
 ## Running
 
@@ -60,8 +63,7 @@ manim -pqm animations/floating_point_story.py FloatingPointStory
 
 ## Notes for Rendering
 
-- Put `FRAME_RATE` and `RENDER_QUALITY` at the top of each animation file.
-- Set `config.frame_rate` from `FRAME_RATE`.
+- Put `RENDER_QUALITY` and `COLOR_SCHEME` at the top of each animation file.
 - Set `RENDER_QUALITY` to `medium` by default and add short comments near it explaining `low`, `medium`, and `high`.
-- Prefer the dark blue visual language for new scenes.
+- Prefer the shared palette helper for new scenes.
 - Keep explanations beginner-friendly and visually driven.

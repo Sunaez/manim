@@ -3,28 +3,28 @@ import subprocess
 import sys
 
 from manim import *
+from palette import apply_palette
 
-FRAME_RATE = 30
 RENDER_QUALITY = "medium"
-# low: 480p, 30fps preview render.
-# medium: 720p, 30fps default render.
-# high: 1080p, 60fps final render.
+# Choose one of: Dark, Light, Sepia.
+# low: 480p preview render.
+# medium: 720p default render.
+# high: 1080p final render.
 
-config.frame_rate = FRAME_RATE
-
-BACKGROUND = "#0f172a"
-SURFACE = "#111827"
-SURFACE_ALT = "#1f2937"
-SURFACE_SOFT = "#334155"
-TEXT = "#f8fafc"
-MUTED = "#94a3b8"
-BLUE = "#38bdf8"
-CYAN = "#22d3ee"
-GREEN = "#22c55e"
-AMBER = "#f59e0b"
-RED = "#f97316"
-PINK = "#f472b6"
-VIOLET = "#a78bfa"
+P = apply_palette("Dark")
+BACKGROUND = P.BG_0
+SURFACE = P.BG_1
+SURFACE_ALT = P.BG_2
+SURFACE_SOFT = P.BG_3
+TEXT = P.TEXT_PRIMARY
+MUTED = P.TEXT_MUTED
+BLUE = P.BLUE
+CYAN = P.CYAN
+GREEN = P.GREEN
+AMBER = P.AMBER
+RED = P.ORANGE
+PINK = P.PINK
+VIOLET = P.PURPLE
 
 
 class AnimationQualityGuide(Scene):
@@ -399,9 +399,9 @@ def render_scene():
 
 def quality_args(name):
     quality_map = {
-        "low": ["-p", "--fps", "30", "-r", "854,480"],
-        "medium": ["-pqm"],
-        "high": ["-p", "--fps", "60", "-r", "1920,1080"],
+        "low": ["-ql"],
+        "medium": ["-qm"],
+        "high": ["-qh"],
     }
     if name not in quality_map:
         raise ValueError(f"Unsupported RENDER_QUALITY: {name!r}")

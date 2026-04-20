@@ -14,34 +14,31 @@ The goal is consistent, readable, dark-mode educational animations that render c
 
 ## Theme
 
-- Use a dark blue background in every scene.
-- Keep a consistent dark-mode palette unless a scene has a strong, intentional reason to vary it.
-- Avoid bright white backgrounds.
+- Every animation must support a single `COLOR_SCHEME` name with one of: `Dark`, `Light`, `Sepia`.
+- Default to `Dark` unless the scene needs a different tone.
+- Use the shared palette mapping rather than hardcoding one-off colors in the scene body.
 - Avoid clashing neon colors.
 - Keep text minimal, readable, and high-contrast.
 
-### Dark Mode Palette
+### Shared Palette Rule
 
-- Background: `#0f172a`
-- Surface: `#1e293b`
-- Primary blue: `#3b82f6`
-- Teal: `#14b8a6`
-- Green: `#22c55e`
-- Orange: `#f59e0b`
-- Red: `#ef4444`
-- Gold: `#eab308`
-- Text: `#f8fafc`
-- Muted text: `#cbd5e1`
+- Keep palette values in a shared helper so every animation can switch schemes by name.
+- The supported scheme names are `Dark`, `Light`, and `Sepia`.
+- Use scheme-specific semantic roles such as background, surface, text, border, accent, and soft fill.
 
 ## Layout And Readability
 
 - Make sure nothing important overlaps.
+- Before rendering, run a preflight layout check on positioned mobjects whenever practical.
+- Prefer failing fast in code with explicit overlap checks or assertions for labels, formulas, callouts, axes, and panels that must not intersect.
+- Use bounding-box checks for a fast first pass, and use tighter geometric checks only when the scene needs them.
 - Check spacing between titles, labels, arrows, formulas, and diagrams before considering a scene finished.
 - Make sure objects do not clip off-screen unless that is intentional.
 - Keep compositions balanced and leave enough empty space for the viewer to follow the main idea.
 - Keep text short enough to read comfortably during playback.
 - Prefer fewer labels with stronger hierarchy over many small labels competing for attention.
-- Use local renders or local previews to catch overlap and spacing issues early because they are faster than waiting for a full final render.
+- Do not run a full local render by default.
+- If you need a visual sanity check, use at most a single-frame render or equivalent static preview to catch overlap and spacing issues.
 
 ## Animation Style
 
@@ -74,38 +71,41 @@ The goal is consistent, readable, dark-mode educational animations that render c
 
 Every animation file should support these quality options:
 
-- `low` = 480p, 30fps preview
-- `medium` = 1280x720, 30fps
-- `high` = 1920x1080, 60fps
+- `low` = preview quality
+- `medium` = standard render quality
+- `high` = final render quality
 
 When adding new scenes or instructions, preserve these presets and keep the run button workflow compatible with them.
 
 At the top of every animation file, define exactly these two variables:
 
-- `FRAME_RATE` for the scene frame rate
 - `RENDER_QUALITY` for the chosen render preset
+- `COLOR_SCHEME` for the palette name
 
 Default to:
 
-- `FRAME_RATE = 30`
 - `RENDER_QUALITY = "medium"`
+- `COLOR_SCHEME = "Dark"`
 
 Add short source comments explaining:
 
-- `low` = 480p, 30fps preview
-- `medium` = 1280x720, 30fps
-- `high` = 1920x1080, 60fps
+- `low` = preview quality
+- `medium` = standard render quality
+- `high` = final render quality
 
 ## Implementation Rules
 
-- Set `config.frame_rate` from the top-level `FRAME_RATE` variable.
+- When asked to create something new, create a new Python file for it.
+- If the concept is different, do not add it to an existing file; put it in a separate new Python file instead.
 - Use the top-level `RENDER_QUALITY` variable inside `render_scene()` so the preset can be changed directly in the file.
+- Use the top-level `COLOR_SCHEME` variable to select the shared palette helper.
 - Keep each animation in its own clearly named file inside `animations/`.
 - Keep scene names stable when possible so VS Code launch configurations remain valid.
 - Keep helper methods inside the scene file when they improve readability and reduce repetition.
-- Reuse palette constants instead of hardcoding many one-off colors throughout a scene.
+- Reuse palette constants through the shared palette helper instead of hardcoding many one-off colors throughout a scene.
 - Keep render helpers consistent with the existing repository pattern.
-- The default VS Code play button should continue to render the medium preset at 720p and 30fps.
+- The default VS Code play button should continue to render the medium preset as the standard render quality.
+- When the VS Code play button starts a render, the launch workflow should automatically open the completed animation file after rendering finishes.
 
 ## Validation Checklist
 
@@ -116,7 +116,7 @@ Before considering a scene complete, check that:
 - continuity is used when the concept is evolving, and old content is removed when it stops helping
 - text is readable and not too dense
 - arrows and labels point clearly to the intended objects
-- the scene works at the medium preset without layout problems
+- if a visual check is needed, use only a single-frame preview rather than a full animation render
 - the file still follows the repository render helper pattern
 
 ## Reference

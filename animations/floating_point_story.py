@@ -3,19 +3,29 @@ import subprocess
 import sys
 
 from manim import *
+from palette import apply_palette
 
-FRAME_RATE = 30
 RENDER_QUALITY = "medium"
-# low: 480p, 30fps preview render.
-# medium: 720p, 30fps default render.
-# high: 1080p, 60fps final render.
+# Choose one of: Dark, Light, Sepia.
+# low: 480p preview render.
+# medium: 720p default render.
+# high: 1080p final render.
 
-config.frame_rate = FRAME_RATE
+P = apply_palette("Dark")
+BACKGROUND = P.BG_0
+SURFACE = P.BG_1
+SURFACE_ALT = P.BG_2
+TEXT = P.TEXT_PRIMARY
+MUTED = P.TEXT_SECONDARY
+BLUE = P.BLUE
+TEAL = P.TEAL
+GREEN = P.GREEN
+AMBER = P.AMBER
 
 
 class FloatingPointStory(Scene):
     def construct(self):
-        self.camera.background_color = "#0f172a"
+        self.camera.background_color = BACKGROUND
 
         self.introduction()
         self.clear()
@@ -184,9 +194,9 @@ def render_scene():
 
 def quality_args(name):
     quality_map = {
-        "low": ["-p", "--fps", "30", "-r", "854,480"],
-        "medium": ["-pqm"],
-        "high": ["-p", "--fps", "60", "-r", "1920,1080"],
+        "low": ["-ql"],
+        "medium": ["-qm"],
+        "high": ["-qh"],
     }
     if name not in quality_map:
         raise ValueError(f"Unsupported RENDER_QUALITY: {name!r}")
