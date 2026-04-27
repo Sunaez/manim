@@ -1,69 +1,61 @@
-# Floating Point Story
+# Manim Educational Animations
 
-This project contains a short educational Manim animation that explains floating-point numbers in a simple visual way.
+This repository is set up for focused Manim animations grouped by concept.
 
-The repository is organized so each animation lives in its own clearly named file inside `animations/`.
+## Structure
 
-## Visual Theme
+- One file should contain one `Scene` class.
+- One folder can contain multiple related animation files.
+- Use folders to group topics such as `cpu/`, `math/`, or `systems/`.
 
-All videos in this project should use the shared palette helper with one of these scheme names:
+Example:
 
-- `Dark`
-- `Light`
-- `Sepia`
-
-Default to `Dark` unless a scene intentionally needs a different tone.
-
-- Keep text minimal and high-contrast
-- Motion: smooth transitions, gentle zooms, and clear labels
-
-## Animation Rules
-
-- Keep each learning chunk isolated.
-- Remove previous text, arrows, highlights, and helper shapes before introducing the next topic.
-- Do not let old examples overlap with new examples unless the overlap is intentionally part of the explanation.
-
-## Scene
-
-The main scene is:
-
-- `FloatingPointStory`
-
-It shows four parts:
-
-1. Introduction
-2. Mantissa and exponent
-3. Normalised vs unnormalised
-4. Storage concept
-
-## VS Code Run Button
-
-The script reads its quality preset from the source file.
-The default play button workflow should stay on the medium preset.
-
-Available options:
-
-- `low` = preview quality
-- `medium` = standard render quality
-- `high` = final render quality
-
-## Running
-
-From the terminal:
-
-```powershell
-python animations/floating_point_story.py
+```text
+animations/
+  cpu/
+    fetch_decode_execute_story.py
+    while_loop_story.py
+  math/
+    floating_point_story.py
+  palette.py
 ```
 
-Or render directly with Manim:
+## Core Workflow
 
-```powershell
-manim -pqm animations/floating_point_story.py FloatingPointStory
+Run animation files directly.
+
+```bash
+python animations/fetch_decode_execute_story.py
+python animations/toaster_black_box.py
 ```
 
-## Notes for Rendering
+## VS Code
 
-- Put `RENDER_QUALITY` and `COLOR_SCHEME` at the top of each animation file.
-- Set `RENDER_QUALITY` to `medium` by default and add short comments near it explaining `low`, `medium`, and `high`.
-- Prefer the shared palette helper for new scenes.
-- Keep explanations beginner-friendly and visually driven.
+- `Ctrl+Shift+B` opens tasks for running the current animation file.
+- The Run/Debug button is configured to call the current file directly.
+
+## Naming Rules
+
+- `new animation` means create a new file
+- `add to my file` means edit an existing file and update its current scene or helpers
+- keep one animation per file
+
+## File Template
+
+Each animation file should define:
+
+```python
+RENDER_QUALITY = "medium"
+# low: preview quality
+# medium: standard render quality
+# high: final render quality
+
+COLOR_SCHEME = "Dark"
+```
+
+That file's animation uses those settings.
+
+## More Detail
+
+- [AI_INSTRUCTIONS.md](AI_INSTRUCTIONS.md)
+- [QUICK_REFERENCE.md](QUICK_REFERENCE.md)

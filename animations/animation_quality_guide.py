@@ -390,6 +390,7 @@ def render_scene():
         sys.executable,
         "-m",
         "manim",
+        "-p",
         *quality_args(RENDER_QUALITY),
         str(script_path),
         "AnimationQualityGuide",

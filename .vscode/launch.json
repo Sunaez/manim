@@ -2,11 +2,13 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Render FloatingPointStory",
+      "name": "Run Current Animation File",
       "type": "python",
       "request": "launch",
-      "program": "${workspaceFolder}/animations/floating_point_story.py",
-      "console": "integratedTerminal"
+      "program": "${file}",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "justMyCode": false
     }
   ]
 }

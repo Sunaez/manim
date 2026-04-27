@@ -184,7 +184,10 @@ class FloatingPointStory(Scene):
 def render_scene():
     script_path = Path(__file__).resolve()
     command = [
+        sys.executable,
+        "-m",
         "manim",
+        "-p",
         *quality_args(RENDER_QUALITY),
         str(script_path),
         "FloatingPointStory",

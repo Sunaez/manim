@@ -2,14 +2,22 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "Render FloatingPointStory",
+      "label": "Run Current Animation File",
       "type": "shell",
       "command": "python",
-      "args": ["animations/floating_point_story.py"],
-      "group": "build",
+      "args": [
+        "${relativeFile}"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
       "presentation": {
         "reveal": "always",
-        "panel": "dedicated"
+        "panel": "shared"
       }
     }
   ]
